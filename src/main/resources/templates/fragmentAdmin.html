@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="icon" th:href="@{/images/VEGETFOOD.png}" type="image/x-icon" /> 
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            padding: 20px 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #f8f9fa;
+        }
+
+        .sidebar .nav-link {
+            font-weight: 500;
+            color: #000;
+        }
+
+        .nav-item.active {
+            color: #fff;
+        }
+
+        .sidebar .logo {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .sidebar .logo img {
+            width: 50px;
+            height: 50px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .header .user-info img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 24px;
+            text-transform: uppercase;
+        }
+
+        .sidebar .logo:hover {
+            color: #333;
+        }
+
+        .icons {
+            font-size: 20px;
+        }
+        
+        .active .nav-link {
+        	color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+	<nav class="col-md-2 d-none d-md-block sidebar" th:fragment="sidebar">
+		<div class="sidebar-sticky">
+			<div class="logo">
+				<a class="navbar-brand text-success" th:href="@{/vegetfood/admin}">Vegefoods</a>
+			</div>
+			<ul class="nav flex-column list-group">
+				<li class="nav-item list-group-item" id="adminTab">
+					<a class="nav-link"
+						th:href="@{/vegetfood/admin}"> Tổng quan </a>
+				</li>
+				<li class="nav-item list-group-item" id="categoryTab">
+					<a class="nav-link" 
+						th:href="@{/vegetfood/admin/category}"> Quản lý loại </a>
+				</li>
+				<li class="nav-item list-group-item" id="productTab">
+					<a class="nav-link"
+						th:href="@{/vegetfood/admin/product}"> Quản lý sản phẩm </a>
+				</li>
+				<li class="nav-item list-group-item" id="employeeTab">
+					<a class="nav-link"
+						href="#"> Quản lý đơn hàng </a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+	<div class="header d-flex justify-content-end" th:fragment="header">
+		<div class="user-info">
+			<div class="mx-4 icons">
+				<i class="fa-regular fa-envelope mx-2"></i> <i
+					class="fa-regular fa-bell mx-2"></i>
+			</div>
+			<img th:src="@{/images/person_1.jpg}" alt="User Avatar"> 
+			<span>Lê Thanh Tuấn</span>
+		</div>
+	</div>
+	
+	<div th:fragment="script">
+	   	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+		<script th:src="@{https://code.jquery.com/jquery-3.5.1.slim.min.js}"></script>
+		<script type="text/javascript">
+			
+		 	// Lấy URL hiện tại
+		    var currentURL = window.location.href;
+
+		    if (currentURL.includes('/admin/category')) {
+		        document.getElementById('categoryTab').classList.add('active');
+		    }
+		    else if (currentURL.includes('/admin/product')) {
+		        document.getElementById('productTab').classList.add('active');
+		    }
+		    else if (currentURL.includes('/admin/employee')) {
+		        document.getElementById('employeeTab').classList.add('active');
+		    } else {
+		    	document.getElementById('adminTab').classList.add('active');
+		    }
+	</script>
+	</div>
+</body>
+</html>

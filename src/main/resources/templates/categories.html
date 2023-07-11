@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head th:replace="fragmentAdmin :: head"></head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="container-fluid">
+        <div class="row">
+            <nav th:replace="fragmentAdmin :: sidebar">
+                
+            </nav>
+
+            <!-- Main Content -->
+            <main class="ml-sm-auto col-lg-10 main-content">
+                <div th:replace="fragmentAdmin :: header">
+                    
+                </div>
+
+                <div class="row mt-3">
+                    <div class="row">
+                        <form class="form-inline d-flex flex-row col-5" th:action="@{/vegetfood/admin/category}" method="get">
+                            <input type="search" class="form-control" name="keyword" th:value="${keyword}" placeholder="Tìm kiếm...">
+                            <button type="submit" class="btn btn-primary mx-2 col-2">
+                                <i class="fa-solid fa-magnifying-glass"></i></button>
+                        </form>
+
+                        <div class="d-flex justify-content-end col-7">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#addCategory">
+                                + Thêm mới
+                            </button>
+                        </div>
+                    </div>
+                    <div class="container mt-3">
+                    	<div th:if="${success}" class="alert alert-success text-center">
+			            	<p th:text="${success}"></p>
+			            </div>
+			            
+						<div th:if = "${error}" class="text-center alert alert-danger">
+			                <p th:text="${error}"></p>
+			            </div>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Tên</th>
+                                    <th scope="col">Trạng thái</th>
+                                    <th scope="col">&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="c : ${categories}">
+                                    <td th:text="${c.id}"></td>
+                                    <td th:text="${c.name}"></td>
+                                    <td th:value="${c.active}">
+									    <span style="padding: 10px; border-radius: 5px;color: #fff;" th:text="${c.active == true ? 'ACTIVE' : 'BLOCK'}" 
+									          th:class="${c.active == false ? 'bg-danger' : 'bg-success'}">
+									    </span>
+									</td>
+
+                                    <td>
+                                        <button type="button" class="btn-edit btn btn-primary" data-bs-toggle="modal"
+			                                data-bs-target="#editCategory">
+			                                <i class="fa fa-edit"></i>
+			                            </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Modal Add -->
+    <div class="modal fade" id="addCategory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <form th:action="@{/vegetfood/admin/category}" method="post" th:object="${category}" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thêm loại sản phẩm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div class="form-group">
+                            <label for="categoryName" class="col-form-label">Tên</label>
+                            <input th:field="*{name}" type="text" class="form-control" id="categoryName" required="required"></input>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal Edit -->
+    <div class="modal fade" id="editCategory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <form th:action="@{/vegetfood/admin/category/update}" method="post" th:object="${category}" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Chỉnh sửa loại sản phẩm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+	                    <div class="">
+				            <label for="idCategory" class="col-form-label">ID</label>
+				            <input type="text" th:field="*{id}" class="form-control" id="id" readonly="readonly">
+				          </div>
+                        <div class="">
+                            <label for="categoryName" class="col-form-label">Tên</label>
+                            <input th:field="*{name}" type="text" class="form-control" id="name"></input>
+                        </div>
+                        <div class="mb-3 col-6">
+                        	<label for="categoryName" class="col-form-label">Trạng thái</label>
+                        	<select class="form-select" th:field="*{active}" name="status" id="status">
+							  <option th:value="true">Active</option>
+							  <option th:value="false">Block</option>
+							</select>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <div th:replace="fragmentAdmin :: script"></div>
+    <script type="text/javascript">
+	    $('.btn-edit').click(function () {
+	        var id = $(this).closest('tr').find('td:eq(0)').text();
+	        var name = $(this).closest('tr').find('td:eq(1)').text();
+	        var status = $(this).closest('tr').find('td:eq(2)').attr('value');
+	        
+	        // Set the values in the modal fields
+	        $('#editCategory #id').val(id);
+	        $('#editCategory #name').val(name);
+	        $('#status option[value="' + status + '"]').prop('selected', true);
+	    })
+    </script>
+</body>
+
+</html>

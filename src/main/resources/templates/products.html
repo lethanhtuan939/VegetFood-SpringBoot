@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head th:replace="fragmentAdmin :: head"></head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="container-fluid">
+        <div class="row">
+            <nav th:replace="fragmentAdmin :: sidebar">
+
+            </nav>
+
+            <!-- Main Content -->
+            <main class="ml-sm-auto col-lg-10 main-content">
+                <div th:replace="fragmentAdmin :: header">
+
+                </div>
+
+                <div class="row mt-3">
+                    <div class="row">
+                        <form class="form-inline d-flex flex-row col-5" th:action="@{/vegetfood/admin/product}" method="get">
+                            <input type="hidden" name="p" th:value="1">
+                            <input type="search" class="form-control" name="keyword" th:value="${keyword}"
+                                placeholder="Tìm kiếm...">
+                            <button type="submit" class="btn btn-primary mx-2 col-2">
+                                <i class="fa-solid fa-magnifying-glass"></i></button>
+                        </form>
+
+                        <div class="d-flex justify-content-end col-7">
+                            <a th:href="@{/vegetfood/admin/product/add(p=${currentPage})}" type="button" class="btn btn-primary">
+                                + Thêm sản phẩm mới
+                            </a>
+                        </div>
+                    </div>
+                    <div class="container mt-3">
+                        <div th:if="${success}" class="alert alert-success text-center">
+                            <p th:text="${success}"></p>
+                        </div>
+
+                        <div th:if="${error}" class="text-center alert alert-danger">
+                            <p th:text="${error}"></p>
+                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Tên</th>
+                                    <th scope="col" class="text-center">Mô tả</th>
+                                    <th scope="col">Giá</th>
+                                    <th scope="col">Hình ảnh</th>
+                                    <th scope="col">Loại</th>
+                                    <th scope="col">Trạng thái</th>
+                                    <th scope="col">&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="p : ${products}">
+                                    <td th:text="${p.id}"></td>
+                                    <td th:text="${p.name}"></td>
+                                    <td th:text="${p.description}" class="text-center"
+                                        style="width: 300px;word-break: break-word;"></td>
+                                    <td th:text="${p.price}"></td>
+                                    <td>
+                                        <img class="product-image" style="height: 80px; width: 80px" th:src="@{'/images/' + ${p.image}}" />
+                                    </td>
+                                    <td th:text="${p.category.name}" th:value="${p.category.id}"></td>
+                                    <!-- <td th:text="${p.active == true ? 'ACTIVE' : 'BLOCK'}" th:class="${p.active == false ? 'text-danger bg-warning' : ''}" th:value="${p.active}"></td> -->
+                                    <td th:value="${p.active}">
+									    <span style="padding: 10px; border-radius: 5px; color: #fff;" th:text="${p.active == true ? 'ACTIVE' : 'BLOCK'}" 
+									          th:class="${p.active == false ? 'bg-danger' : 'bg-success'}">
+									    </span>
+									</td>
+                                    <td>
+                                        <button type="button" class="btn-edit btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#editProduct">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <nav aria-label="navigation">
+                            <ul class="pagination d-flex justify-content-end">
+                                <li class="page-item" th:if="${currentPage > 1}">
+                                    <a class="page-link" th:href="@{/vegetfood/admin/product(p=${currentPage - 1}, keyword=${keyword})}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item" th:each="i: ${#numbers.sequence(1, totalPages)}"
+                                    th:classappend="${currentPage == i ? 'active' : ''}">
+                                    <a class="page-link"
+                                        th:href="@{/vegetfood/admin/product(p=${i}, keyword=${keyword})}" th:text="${i}"></a>
+                                </li>
+                                <li class="page-item" th:if="${currentPage < totalPages}">
+                                    <a class="page-link" th:href="@{/vegetfood/admin/product(p=${currentPage + 1}, keyword=${keyword})}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal Edit -->
+    <div class="modal fade" id="editProduct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <form th:action="@{/vegetfood/admin/product/update(p=${currentPage})}" method="post" th:object="${product}"
+                class="modal-content" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title">Chỉnh sửa sản phẩm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body row">
+                    <div class="col-md-2 my-2">
+                        <label for="id" class="form-label">ID</label>
+                        <input type="text" class="form-control" id="id" placeholder="ID..." th:field="*{id}"
+                            readonly>
+                    </div>
+                    <div class="col-md-3 my-2">
+                        <label for="category" class="form-label">Loại sản phẩm</label>
+                        <select id="category" name="category" class="form-select" th:field="*{category.id}">
+                            <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 my-2">
+                        <label for="name" class="form-label">Tên</label>
+                        <input type="text" class="form-control" id="name" placeholder="Tên sản phẩm..."
+                            th:field="*{name}">
+                    </div>
+                    <div class="col-md-12 my-2">
+                        <label for="description" class="form-label">Mô tả</label>
+                        <textarea class="form-control" id="description" th:field="*{description}"
+                            placeholder="Mô tả..."></textarea>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Giá</label>
+                                <input type="number" class="form-control" id="price" placeholder="123456789.0"
+                                    th:field="*{price}">
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="mb-3">
+                                <label for="image" class="form-label">Hình ảnh</label>
+                                <input type="file" class="form-control" id="image" name="file">
+                                <img style="height: 50px; width: 50px;" class="mt-2" src="" alt="" id="img">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+	                        <label for="status" class="form-label">Trạng thái</label>
+	                        <select id="status" class="form-select" th:field="*{active}">
+	                            <option th:value="true">ACTIVE</option>
+	                            <option th:value="false">BLOCK</option>
+	                        </select>
+	                    </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <div th:replace="fragmentAdmin :: script"></div>
+    <script type="text/javascript">
+    $('.btn-edit').click(function () {
+        var id = $(this).closest('tr').find('td:eq(0)').text();
+        var name = $(this).closest('tr').find('td:eq(1)').text();
+        var description = $(this).closest('tr').find('td:eq(2)').text();
+        var price = $(this).closest('tr').find('td:eq(3)').text();
+        var category = $(this).closest('tr').find('td:eq(5)').attr('value');
+        var status = $(this).closest('tr').find('td:eq(6)').attr('value');
+
+        var imageSrc = $(this).closest('tr').find('.product-image').attr('src');
+        
+        var imageName = imageSrc.substring(imageSrc.lastIndexOf('/') + 1);
+
+        // Set the values in the modal fields
+        $('#editProduct #id').val(id);
+        $('#editProduct #name').val(name);
+        $('#editProduct #description').val(description);
+        $('#editProduct #price').val(price);
+        $('#editProduct #category option[value="' + category + '"]').prop('selected', true);
+        $('#editProduct #status option[value="' + status + '"]').prop('selected', true);
+        $('#editProduct #img').attr('src', imageSrc); 
+        $('#editProduct #image').val(imageName); 
+    });
+    
+    const image = document.getElementById('img')
+    const input = document.getElementById('image')
+
+    input.addEventListener("change", () => {
+        image.src=URL.createObjectURL(input.files[0])
+    })
+
+    </script>
+</body>
+
+</html>

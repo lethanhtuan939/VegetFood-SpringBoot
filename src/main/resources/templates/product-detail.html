@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head th:replace="fragment :: head"></head>
+
+<body class="goto-here">
+	<div th:replace="fragment :: top"></div>
+
+	<nav th:replace="fragment :: nav"></nav>
+
+	<div class="hero-wrap hero-bread" style="background-image: url('/images/bg_1.jpg');">
+		<div class="container">
+			<div class="row no-gutters slider-text align-items-center justify-content-center">
+				<div class="col-md-9 ftco-animate text-center">
+					<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span class="mr-2"><a
+								href="index.html">Product</a></span> <span>Product Single</span></p>
+					<h1 class="mb-0 bread">Product Single</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<section class="ftco-section">
+		<div class="container">
+			<div th:if="${success}" class="alert alert-success text-center">
+				<p th:text="${success}"></p>
+			</div>
+
+			<div th:if="${error}" class="text-center alert alert-danger">
+				<p th:text="${error}"></p>
+			</div>
+			<div class="row">
+				<div class="col-lg-6 mb-5 ftco-animate">
+					<a href="images/product-1.jpg" class="image-popup">
+						<img th:src="@{'/images/' + ${product.image}}" class="img-fluid" alt="Colorlib Template"></a>
+				</div>
+				<form th:action="@{/vegetfood/add-to-cart}" method="get"
+					class="col-lg-6 product-details pl-md-5 ftco-animate">
+					<input type="hidden" name="id" th:value="${product.id}">
+					<h3 th:text="${product.name}"></h3>
+					<div class="rating d-flex">
+						<p class="text-left mr-4">
+							<a href="#" class="mr-2">5.0</a>
+							<a href="#"><span class="ion-ios-star-outline"></span></a>
+							<a href="#"><span class="ion-ios-star-outline"></span></a>
+							<a href="#"><span class="ion-ios-star-outline"></span></a>
+							<a href="#"><span class="ion-ios-star-outline"></span></a>
+							<a href="#"><span class="ion-ios-star-outline"></span></a>
+						</p>
+						<p class="text-left mr-4">
+							<a href="#" class="mr-2" style="color: #000;">100 <span
+									style="color: #bbb;">Rating</span></a>
+						</p>
+						<p class="text-left">
+							<a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">Sold</span></a>
+						</p>
+					</div>
+					<p class="price"><span th:text="'$'+${product.price}"></span></p>
+					<p th:text="${product.description}"></p>
+					<div class="row mt-4">
+						<div class="col-md-6">
+							<div class="form-group d-flex">
+								<div class="select-wrap">
+									<div class="icon">
+										<span class="fa-solid fa-chevron-down"></span>
+									</div>
+									<select name="size" id="size" class="form-control">
+										<option value="1">Small</option>
+										<option value="2">Medium</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="w-100"></div>
+						<div class="input-group col-md-6 d-flex mb-3">
+							<span class="input-group-btn mr-2">
+								<button type="button" class="quantity-left-minus btn" data-type="minus" data-field="">
+									<i class="fa-solid fa-minus"></i>
+								</button>
+							</span>
+							<input type="text" id="quantity" name="quantity" value="1" class="form-control input-number" min="1"
+								max="100">
+							<span class="input-group-btn ml-2">
+								<button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
+									<i class="fa-solid fa-plus"></i>
+								</button>
+							</span>
+						</div>
+						<div class="w-100"></div>
+						<div class="col-md-12">
+							<p style="color: #000;">600 kg available</p>
+						</div>
+					</div>
+					<p><input type="submit" class="btn btn-black py-3 px-5" value="Thêm vào giỏ hàng"/></p>
+				</form>
+			</div>
+		</div>
+	</section>
+
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center mb-3 pb-3">
+				<div class="col-md-12 heading-section text-center ftco-animate">
+					<span class="subheading">Sản phẩm</span>
+					<h2 class="mb-4">Sản phẩm có liên quan</h2>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6 col-lg-3 ftco-animate" th:each="p : ${relatedProducts}">
+					<div class="product">
+						<a th:href="@{/vegetfood/shop/detail(id=${p.id})}" class="img-prod">
+							<img class="img-fluid" th:src="@{'/images/' + ${p.image}}" alt="Colorlib Template">
+							<span class="status">30%</span>
+							<div class="overlay"></div>
+						</a>
+						<div class="text py-3 pb-4 px-3 text-center">
+							<h3><a th:text="${p.name}" th:href="@{/vegetfood/shop/detail(id=${p.id})}"></a></h3>
+							<div class="d-flex">
+								<div class="pricing">
+									<p class="price">
+										<span class="mr-2 price-dc" th:text="'$'+${p.price}"></span>
+										<span class="price-sale" th:text="'$'+${p.price}"></span>
+									</p>
+								</div>
+							</div>
+							<div class="bottom-area d-flex px-3">
+								<div class="m-auto d-flex">
+									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
+										<span><i class="fa-solid fa-cart-shopping"></i></span>
+									</a>
+									<a href="#" class="heart d-flex justify-content-center align-items-center ">
+										<span><i class="fa-solid fa-heart"></i></span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row mt-5">
+				<div class="col text-center">
+					<div class="block-27">
+						<ul>
+							<li th:if="${currentPage > 1}">
+								<a th:href="@{/vegetfood/shop/detail(id=${productId}, p=${currentPage - 1})}">&lt;</a>
+							</li>
+							<li th:each="i: ${#numbers.sequence(1, totalPages)}"
+								th:classappend="${currentPage == i ? 'active' : ''}">
+								<a th:href="@{/vegetfood/shop/detail(id=${productId}, p=${i})}" th:text="${i}"></a>
+							</li>
+							<li th:if="${currentPage < totalPages}">
+								<a th:href="@{/vegetfood/shop/detail(id=${productId}, p=${currentPage + 1})}">&gt;</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<footer th:replace="fragment :: footer"></footer>
+
+	<!-- loader -->
+	<div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
+			<circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+			<circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+				stroke="#F96D00" />
+		</svg></div>
+
+
+	<div th:replace="fragment :: script"></div>
+
+	<script>
+		$(document).ready(function () {
+
+			var quantitiy = 0;
+			$('.quantity-right-plus').click(function (e) {
+
+				e.preventDefault();
+				var quantity = parseInt($('#quantity').val());
+				$('#quantity').val(quantity + 1);
+
+			});
+
+			$('.quantity-left-minus').click(function (e) {
+				e.preventDefault();
+				var quantity = parseInt($('#quantity').val());
+				if (quantity > 1) {
+					$('#quantity').val(quantity - 1);
+				}
+			});
+
+		});
+
+	</script>
+
+</body>
+
+</html>

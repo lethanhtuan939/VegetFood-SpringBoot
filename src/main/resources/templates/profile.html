@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head th:replace="fragment :: head"></head>
+<style>
+    .profile-image {
+        margin-top: 10px;
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .profile-image-container {
+        position: relative;
+        height: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .file-input-label {
+        position: absolute;
+        bottom: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 8px 12px;
+        background-color: #e9ecef;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .file-input-label:hover {
+        background-color: #f8f9fa;
+    }
+</style>
+
+<body class="goto-here">
+    <div th:replace="fragment :: top"></div>
+
+    <nav th:replace="fragment :: nav"></nav>
+
+    <section class="ftco-section">
+        <div class="container">
+            <div th:if="${success}" class="alert alert-success text-center">
+                <p th:text="${success}"></p>
+            </div>
+
+            <div th:if="${error}" class="text-center alert alert-danger">
+                <p th:text="${error}"></p>
+            </div>
+            <form class="row mt-5" th:object="${user}" th:action="@{/vegetfood/user}" method="post"
+                enctype="multipart/form-data">
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="profile-image-container">
+                            <img id="profileImage" th:src="@{'/images/' + ${user.image}}"
+                                class="profile-image card-img-top" alt="Profile Image">
+                            <label for="avatarInput" class="file-input-label mt-2">Thay đổi ảnh</label>
+                            <input type="file" id="avatarInput" name="file" style="display: none;">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title mt-3" th:text="${user.name}"></h5>
+                            <p th:text="${user.email}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <h2>Thông tin cá nhân</h2>
+                    <div>
+                        <div class="row">
+                        	<div class="mb-3 col-8">
+	                            <input type="hidden" th:value="${user.id}" th:field="*{id}">
+	                            <label for="nameInput" class="form-label">Tên:</label>
+	                            <input type="text" class="form-control" id="nameInput" th:field="*{name}"
+	                                th:value="${user.name}">
+	                        </div>
+	                        <div class="mb-3 col-4">
+	                            <label for="phoneNumber" class="form-label">Số điện thoại:</label>
+	                            <input type="text" class="form-control" id="phoneNumber" th:field="*{phoneNumber}"
+	                                th:value="${user.phoneNumber}">
+	                        </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="emailInput" class="form-label">Email:</label>
+                            <input type="email" class="form-control" id="emailInput" th:field="*{email}"
+                                th:value="${user.email}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="addressInput" class="form-label">Địa chỉ:</label>
+                            <input type="text" class="form-control" id="addressInput" th:field="*{address}"
+                                th:value="${user.address}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Trạng thái:</label>
+                            <input type="text" class="form-control col-md-2" id="status" readonly="readonly"
+                                th:field="*{active}" th:value="${user.active == true ? 'ACTIVE' : 'BLOCK'}">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Cập nhật</button>
+                    </div>
+                </div>
+            </form>
+            <div class="row mt-5">
+                <div class="col-md-12">
+                    <h2>Order History</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Product 1</td>
+                                <td>2</td>
+                                <td>$19.99</td>
+                                <td>
+                                    <button class="btn btn-danger">Cancel</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Product 2</td>
+                                <td>1</td>
+                                <td>$9.99</td>
+                                <td>
+                                    <button class="btn btn-danger">Cancel</button>
+                                </td>
+                            </tr>
+                            <!-- Add more rows for other order details -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer th:replace="fragment :: footer"></footer>
+
+    <!-- loader -->
+    <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
+            <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+            <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+                stroke="#F96D00" />
+        </svg></div>
+
+
+    <div th:replace="fragment :: script"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const avatarInput = document.getElementById('avatarInput');
+        const profileImage = document.getElementById('profileImage');
+
+        avatarInput.addEventListener('change', function (event) {
+            const input = event.target;
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    profileImage.src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        });
+    </script>
+
+</body>
+
+</html>
