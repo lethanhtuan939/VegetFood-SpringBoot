@@ -43,10 +43,10 @@ public class SecutiryConfig {
 			.authorizeHttpRequests(auth -> auth
 					.requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
 					.requestMatchers("/vegetfood/auth/**").permitAll()
-					.requestMatchers(HttpMethod.GET).permitAll()
+					.requestMatchers("/vegetfood/add-to-cart/**").authenticated()
+					.requestMatchers("/vegetfood/admin/**").hasAuthority("ADMIN")
 					.anyRequest().permitAll()
 			)
-			
 			.formLogin(form -> form
 					.loginPage("/vegetfood/auth/login")
 					.loginProcessingUrl("/login")

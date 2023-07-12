@@ -61,18 +61,17 @@ public class CartServiceImpl implements CartServive {
 	
 	@Override
 	public boolean updateCart(Integer productId, int quantity, UserDto user, HttpSession session) {
-		try {
-			String cartKey = "cart_" + user.getId();
-			Map<Integer, ShoppingCart> carts = (Map<Integer, ShoppingCart>) session.getAttribute(cartKey);
-			carts.get(productId).setQuantity(quantity);
+	    try {
+	        String cartKey = "cart_" + user.getId();
+	        Map<Integer, ShoppingCart> carts = (Map<Integer, ShoppingCart>) session.getAttribute(cartKey);
 
-			session.setAttribute(cartKey, carts);
-			
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
+	       carts.get(productId).setQuantity(quantity);
+	       return true;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
 	}
+
 
 }

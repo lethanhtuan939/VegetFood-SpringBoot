@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import vn.LeThanhTuan.entity.User;
+import vn.LeThanhTuan.entity.dto.UserDto;
 
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler{
@@ -22,7 +23,15 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		
 		 HttpSession session = request.getSession();
 		 User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		 session.setAttribute("user", authUser);
+		 UserDto user = new UserDto();
+		 user.setId(authUser.getId());
+		 user.setEmail(authUser.getEmail());
+		 user.setAddress(authUser.getAddress());
+		 user.setActive(authUser.isActive());
+		 user.setImage(authUser.getImage());
+		 user.setPhoneNumber(authUser.getPhoneNumber());
+		 
+		 session.setAttribute("user", user);
 		 
 		 response.sendRedirect("vegetfood");
 	}

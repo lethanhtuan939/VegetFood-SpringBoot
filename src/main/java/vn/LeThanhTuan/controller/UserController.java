@@ -43,7 +43,6 @@ public class UserController {
 							@RequestParam("file") MultipartFile file,
 							RedirectAttributes attributes, HttpSession session) throws IOException {
 		UserDto user = userService.updateUser(userDto, file);
-		System.out.println(user);
 		
 		if(user == null) {
 			attributes.addFlashAttribute("error", "Cập nhật không thành công!");

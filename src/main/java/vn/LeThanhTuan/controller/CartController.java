@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
 import vn.LeThanhTuan.entity.ShoppingCart;
+import vn.LeThanhTuan.entity.User;
 import vn.LeThanhTuan.entity.dto.UserDto;
 import vn.LeThanhTuan.service.CartServive;
 import vn.LeThanhTuan.service.UserService;
@@ -29,25 +30,29 @@ public class CartController {
 	UserService userService;
 	
 	@GetMapping("/cart")
-	public String getCart(HttpSession session, Principal principal, Model model) {
-		String email = principal.getName();
-		UserDto user = userService.findByEmail(email);
+	public String getCart(HttpSession session, Model model) {
+		UserDto userSession = (UserDto) session.getAttribute("user");
+		if(userSession == null) {
+			model.addAttribute("empty", "Bạn chưa có sản phẩm nào trong giỏ hàng!");
+			return "cart";
+		}
+		UserDto user = userService.findByEmail(userSession.getEmail());
 		String cartKey = "cart_" + user.getId();
 		Map<Integer, ShoppingCart> carts = (Map<Integer, ShoppingCart>) session.getAttribute(cartKey);
 		
-		if(carts.isEmpty()) {
+		double totalPrice = 0;
+		if(carts == null || carts.isEmpty()) {
 			model.addAttribute("empty", "Bạn chưa có sản phẩm nào trong giỏ hàng!");
 		} else {
-			double totalPrice = 0;
 			Set<Integer> set = carts.keySet();
 			
 			for (Integer item : set) {
 				totalPrice += carts.get(item).getProduct().getPrice() * carts.get(item).getQuantity();
 			}
 			
-			model.addAttribute("totalPrice", totalPrice);
 			model.addAttribute("carts", carts);
 		}
+		model.addAttribute("totalPrice", totalPrice);
 		
 		return "cart";
 	}
@@ -71,6 +76,9 @@ public class CartController {
 							RedirectAttributes attributes, HttpSession session, Principal principal) {
 		String email = principal.getName();
 		UserDto user = userService.findByEmail(email);
+		
+		System.out.println(productId);
+		System.out.println(quantity);
 		
 		boolean isUpdated = cartServive.updateCart(productId, quantity, user, session);
 		if(isUpdated) {

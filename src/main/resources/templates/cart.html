@@ -8,11 +8,9 @@
 
 	<nav th:replace="fragment :: nav"></nav>
 
-	<div class="hero-wrap hero-bread"
-		style="background-image: url('/images/bg_1.jpg');">
+	<div class="hero-wrap hero-bread" style="background-image: url('/images/bg_1.jpg');">
 		<div class="container">
-			<div
-				class="row no-gutters slider-text align-items-center justify-content-center">
+			<div class="row no-gutters slider-text align-items-center justify-content-center">
 				<div class="col-md-9 ftco-animate text-center">
 					<p class="breadcrumbs">
 						<span class="mr-2"><a th:href="@{/vegetfood}">Home</a></span> <span>Cart</span>
@@ -30,15 +28,15 @@
 					<div class="cart-list">
 						<h4 class="text-center" th:if="${empty != null}" th:text="${empty}"></h4>
 						<h4 class="text-center" th:if="${message != null}" th:text="${message}"></h4>
-						
+
 						<div th:if="${success}" class="alert alert-success text-center">
 							<p th:text="${success}"></p>
 						</div>
-			
+
 						<div th:if="${error}" class="text-center alert alert-danger">
 							<p th:text="${error}"></p>
 						</div>
-						
+
 						<table class="table" th:if="${empty == null}">
 							<thead class="thead-primary">
 								<tr class="text-center">
@@ -52,111 +50,110 @@
 							</thead>
 							<tbody>
 								<tr class="text-center" th:each="c : ${carts}">
-									<form th:action="@{/vegetfood/cart/update}" method="get" th:id="'form-' + ${c.value.product.id}">
+									<form th:action="@{/vegetfood/cart/update}" method="get"
+									      th:id="'form-' + ${c.value.product.id}">
+										<input type="hidden" th:value="${c.value.product.id}" name="id">
 										<td class="image-prod">
-											<div class="img" th:style="'background-image: url(/images/' + ${c.value.product.image} + ');'"></div>
+											<div class="img"
+												th:style="'background-image: url(/images/' + ${c.value.product.image} + ');'">
+											</div>
 										</td>
-	
+
 										<td class="product-name">
-											<a th:href="@{/vegetfood/shop/detail(id=${c.value.product.id})}" th:text="${c.value.product.name}"></a>
+											<a th:href="@{/vegetfood/shop/detail(id=${c.value.product.id})}"
+												th:text="${c.value.product.name}"></a>
 											<p th:text="${c.value.product.description}"></p>
 										</td>
-	
+
 										<td class="price" th:text="'$'+${c.value.product.price}"></td>
-	
+
 										<td class="quantity">
 											<div class="input-group mb-3">
-												<button type="button"
-													class="quantity-left-minus" data-type="minus"
+												<button type="button" class="quantity-left-minus" data-type="minus"
 													data-field="quantity">
 													<i class="fa-solid fa-minus"></i>
 												</button>
-												<input type="text" name="quantity"
-													class="quantity form-control input-number" th:value="${c.value.quantity}" min="1"
-													max="100" readonly="readonly">
-												<input type="hidden" th:value="${c.value.product.id}" name="id">
-												<button type="button"
-													class="quantity-right-plus" data-type="plus"
+												<input type="number" name="quantity"
+													class="quantity form-control input-number"
+													th:value="${c.value.quantity}" min="1" max="100">
+												<button type="submit" class="quantity-right-plus" data-type="plus"
 													data-field="quantity">
 													<i class="fa-solid fa-plus"></i>
 												</button>
 											</div>
 										</td>
-	
-										<td class="total" th:text="'$'+${c.value.product.price * c.value.quantity}"></td>
+
+										<td class="total" th:text="'$'+${c.value.product.price * c.value.quantity}">
+										</td>
 										<td class="product-remove">
-											<a th:href="@{/vegetfood/cart/remove(id=${c.value.product.id})}"><span class="fa-solid fa-trash text-danger"></span></a>
-											<a style="cursor: pointer;" th:onclick="'setAction(\'' + ${c.value.product.id} + '\')'" class="ml-2"><span class="fa-solid fa-check text-success"></span></a>
+											<a th:href="@{/vegetfood/cart/remove(id=${c.value.product.id})}"><span
+													class="fa-solid fa-trash text-danger"></span></a>
+											<a style="cursor: pointer;" th:onclick="'setAction(\'' + ${c.value.product.id} + '\')'" class="ml-2">
+												<span class="fa-solid fa-check text-success"></span>
+											</a>
 										</td>
 									</form>
 								</tr>
+
+
 								<!-- END TR-->
 							</tbody>
 						</table>
 					</div>
-					<a th:href="@{/vegetfood/shop}" class="btn btn-primary">Tiếp tục mua sắm</a>
+					<a th:href="@{/vegetfood/shop}" class="btn btn-primary d-flex justify-content-center mx-auto">Tiếp
+						tục mua sắm</a>
 				</div>
 			</div>
-			<div class="row justify-content-end">
+			<div class="row justify-content-end" th:if="${session.user != null}">
 				<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
 					<div class="cart-total mb-3">
-						<h3>Coupon Code</h3>
-						<p>Enter your coupon code if you have one</p>
+						<h3>Mã giảm giá</h3>
+						<p>Nhập mã giảm giá của bạn</p>
 						<form action="#" class="info">
 							<div class="form-group">
-								<label for="">Coupon code</label> <input type="text"
-									class="form-control text-left px-3" placeholder="">
+								<label for="">Mã giảm giá</label> <input type="text" class="form-control text-left px-3"
+									placeholder="">
 							</div>
 						</form>
 					</div>
 					<p>
-						<a href="checkout.html" class="btn btn-primary py-3 px-4">Apply
-							Coupon</a>
+						<a href="checkout.html" class="btn btn-primary py-3 px-4">Xác nhận</a>
 					</p>
 				</div>
 				<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
 					<div class="cart-total mb-3">
-						<h3>Estimate shipping and tax</h3>
-						<p>Enter your destination to get a shipping estimate</p>
+						<h3>Ước tính phí vận chuyển và thuế</h3>
 						<form action="#" class="info">
 							<div class="form-group">
-								<label for="">Country</label> <input type="text"
-									class="form-control text-left px-3" placeholder="">
+								<label for="">Địa chỉ</label> <input type="text" class="form-control text-left px-3"
+									th:value="${session.user.address}">
 							</div>
 							<div class="form-group">
-								<label for="">State/Province</label> <input type="text"
-									class="form-control text-left px-3" placeholder="">
-							</div>
-							<div class="form-group">
-								<label for="">Zip/Postal Code</label> <input type="text"
-									class="form-control text-left px-3" placeholder="">
+								<label for="">Số điện thoại</label> <input type="text"
+									class="form-control text-left px-3" th:value="${session.user.phoneNumber}">
 							</div>
 						</form>
 					</div>
-					<p>
-						<a href="checkout.html" class="btn btn-primary py-3 px-4">Estimate</a>
-					</p>
 				</div>
 				<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
 					<div class="cart-total mb-3">
-						<h3>Cart Totals</h3>
+						<h3>Tổng tiền</h3>
 						<p class="d-flex">
-							<span>Subtotal</span> <span>$20.60</span>
+							<span>Tạm tính</span> <span th:text="'$'+${totalPrice}"></span>
 						</p>
 						<p class="d-flex">
-							<span>Delivery</span> <span>$0.00</span>
+							<span>Phí vận chuyển</span> <span>$0.00</span>
 						</p>
 						<p class="d-flex">
-							<span>Discount</span> <span>$3.00</span>
+							<span>Giảm giá</span> <span>$0.00</span>
 						</p>
 						<hr>
 						<p class="d-flex total-price">
-							<span>Total</span> <span>$17.60</span>
+							<span>Tổng cộng</span> <span th:text="'$'+${totalPrice}"></span>
 						</p>
 					</div>
 					<p>
-						<a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed
-							to Checkout</a>
+						<a href="checkout.html" class="btn btn-primary py-3 px-4">Thanh toán</a>
 					</p>
 				</div>
 			</div>
@@ -168,18 +165,17 @@
 	<!-- loader -->
 	<div id="ftco-loader" class="show fullscreen">
 		<svg class="circular" width="48px" height="48px">
-	<circle class="path-bg" cx="24" cy="24" r="22" fill="none"
-				stroke-width="4" stroke="#eeeeee" />
-	<circle class="path" cx="24" cy="24" r="22" fill="none"
-				stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" />
-</svg>
+			<circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+			<circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+				stroke="#F96D00" />
+		</svg>
 	</div>
 
 	<div th:replace="fragment :: script"></div>
 
 	<script>
-		$(document).ready(function() {
-			$('.quantity-right-plus').click(function(e) {
+		$(document).ready(function () {
+			$('.quantity-right-plus').click(function (e) {
 				e.preventDefault();
 				var fieldName = $(this).data('field');
 				var input = $(this).closest('.input-group').find('input');
@@ -187,7 +183,7 @@
 				input.val(quantity + 1);
 			});
 
-			$('.quantity-left-minus').click(function(e) {
+			$('.quantity-left-minus').click(function (e) {
 				e.preventDefault();
 				var fieldName = $(this).data('field');
 				var input = $(this).closest('.input-group').find('input');
@@ -197,12 +193,13 @@
 				}
 			});
 		});
-		
-		
+
+
 		function setAction(id) {
-			var form = document.getElementById('form-'+ id)
+			var form = document.getElementById('form-' + id);
 			form.submit();
-		};
+		}
 	</script>
 </body>
+
 </html>

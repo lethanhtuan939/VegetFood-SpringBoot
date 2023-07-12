@@ -70,7 +70,6 @@ public class ShopController {
     public String getProductDetail(Model model, @RequestParam("id") Integer id, @RequestParam(value = "p", defaultValue = "1") int pageIndex) {
     	ProductDto product = productService.getProductById(id);
     	Integer categoryId = product.getCategory().getId();
-    	System.out.println(categoryId);
  	
     	Page<ProductDto> page = productService.getAllProductByCategoryId("", pageIndex, 4, categoryId);
     	List<ProductDto> products = page.getContent();
