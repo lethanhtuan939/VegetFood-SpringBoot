@@ -2,6 +2,12 @@
 <html lang="en" xmlns:th="http://thymeleaf.org">
 
 <head th:replace="fragmentAdmin :: head"></head>
+<style>
+	.align-middle {
+	  vertical-align: middle;
+	}
+
+</style>
 
 <body>
     <!-- Sidebar -->
@@ -56,22 +62,22 @@
                             </thead>
                             <tbody>
                                 <tr th:each="p : ${products}">
-                                    <td th:text="${p.id}"></td>
-                                    <td th:text="${p.name}"></td>
-                                    <td th:text="${p.description}" class="text-center"
+                                    <td th:text="${p.id}" class="align-middle"></td>
+                                    <td th:text="${p.name}" class="align-middle"></td>
+                                    <td th:text="${p.description}" class="text-center align-middle"
                                         style="width: 300px;word-break: break-word;"></td>
-                                    <td th:text="${p.price}"></td>
-                                    <td>
+                                    <td th:text="${p.price}" class="align-middle"></td>
+                                    <td class="align-middle">
                                         <img class="product-image" style="height: 80px; width: 80px" th:src="@{'/images/' + ${p.image}}" />
                                     </td>
-                                    <td th:text="${p.category.name}" th:value="${p.category.id}"></td>
-                                    <!-- <td th:text="${p.active == true ? 'ACTIVE' : 'BLOCK'}" th:class="${p.active == false ? 'text-danger bg-warning' : ''}" th:value="${p.active}"></td> -->
-                                    <td th:value="${p.active}">
+                                    <td th:text="${p.category.name}" class="align-middle" th:value="${p.category.id}"></td>
+                                   
+                                    <td th:value="${p.active}" class="align-middle">
 									    <span style="padding: 10px; border-radius: 5px; color: #fff;" th:text="${p.active == true ? 'ACTIVE' : 'BLOCK'}" 
 									          th:class="${p.active == false ? 'bg-danger' : 'bg-success'}">
 									    </span>
 									</td>
-                                    <td>
+                                    <td class="align-middle">
                                         <button type="button" class="btn-edit btn btn-primary" data-bs-toggle="modal"
                                             data-bs-target="#editProduct">
                                             <i class="fa fa-edit"></i>

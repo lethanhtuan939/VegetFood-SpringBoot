@@ -90,6 +90,11 @@
         .active .nav-link {
         	color: #fff;
         }
+        a {
+        	text-decoration: none;
+        	color: #000;
+        }
+        
     </style>
 </head>
 <body>
@@ -102,33 +107,50 @@
 			<ul class="nav flex-column list-group">
 				<li class="nav-item list-group-item" id="adminTab">
 					<a class="nav-link"
-						th:href="@{/vegetfood/admin}"> Tổng quan </a>
+						th:href="@{/vegetfood/admin}"><i class="fa-solid fa-house"></i>&nbsp;Tổng quan </a>
 				</li>
 				<li class="nav-item list-group-item" id="categoryTab">
 					<a class="nav-link" 
-						th:href="@{/vegetfood/admin/category}"> Quản lý loại </a>
+						th:href="@{/vegetfood/admin/category}"><i class="fa-sharp fa-regular fa-chart-bar"></i>&nbsp;Quản lý loại </a>
 				</li>
 				<li class="nav-item list-group-item" id="productTab">
 					<a class="nav-link"
-						th:href="@{/vegetfood/admin/product}"> Quản lý sản phẩm </a>
+						th:href="@{/vegetfood/admin/product}"><i class="fa-solid fa-box"></i>&nbsp;Quản lý sản phẩm </a>
 				</li>
-				<li class="nav-item list-group-item" id="employeeTab">
+				<li class="nav-item list-group-item" id="orderTab">
 					<a class="nav-link"
-						href="#"> Quản lý đơn hàng </a>
+						th:href="@{/vegetfood/admin/order}"><i class="fa-solid fa-shopping-cart"></i>&nbsp;Quản lý đơn hàng </a>
 				</li>
 			</ul>
 		</div>
 	</nav>
 
-	<div class="header d-flex justify-content-end" th:fragment="header">
-		<div class="user-info">
-			<div class="mx-4 icons">
-				<i class="fa-regular fa-envelope mx-2"></i> <i
-					class="fa-regular fa-bell mx-2"></i>
-			</div>
-			<img th:src="@{/images/person_1.jpg}" alt="User Avatar"> 
-			<span>Lê Thanh Tuấn</span>
+	<div class="header" th:fragment="header">
+		<div class="d-flex justify-content-start align-items-center">
+			<i class="fa-solid fa-bars" style="font-size: 20px;"></i>
+			<h4>&nbsp;&nbsp;Quản lý</h4>
 		</div>
+	    <div class="user-info d-flex justify-content-end">
+	        <div class="mx-4 icons">
+	            <i class="fa-regular fa-envelope mx-2"></i>
+	            <i class="fa-regular fa-bell mx-2"></i>
+	        </div>
+	        <div class="user-avatar">
+	            <div class="dropdown">
+	                <a class="dropdown-toggle" href="#" role="button" id="avatarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+	                    <img class="avatar-image" th:src="@{'/images/' + ${session.user.image}}" alt="User Avatar">
+			            <span class="user-name">[[${session.user.name}]]</span>
+	                </a>
+	                <ul class="dropdown-menu mt-3" aria-labelledby="avatarDropdown">
+	                    <li>
+	                    	<a class="dropdown-item" th:href="@{/vegetfood/logout}">
+	                    		<i class="fa-solid fa-right-from-bracket"></i>
+	                    	&nbsp;Đăng xuất</a>
+	                    </li>
+	                </ul>
+	            </div>
+	        </div>
+	    </div>
 	</div>
 	
 	<div th:fragment="script">
@@ -145,11 +167,12 @@
 		    else if (currentURL.includes('/admin/product')) {
 		        document.getElementById('productTab').classList.add('active');
 		    }
-		    else if (currentURL.includes('/admin/employee')) {
-		        document.getElementById('employeeTab').classList.add('active');
+		    else if (currentURL.includes('/admin/order')) {
+		        document.getElementById('orderTab').classList.add('active');
 		    } else {
 		    	document.getElementById('adminTab').classList.add('active');
 		    }
+		    
 	</script>
 	</div>
 </body>

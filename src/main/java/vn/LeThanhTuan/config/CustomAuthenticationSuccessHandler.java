@@ -25,6 +25,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		 User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		 UserDto user = new UserDto();
 		 user.setId(authUser.getId());
+		 user.setName(authUser.getName());
 		 user.setEmail(authUser.getEmail());
 		 user.setAddress(authUser.getAddress());
 		 user.setActive(authUser.isActive());

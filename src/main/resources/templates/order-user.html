@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head th:replace="fragment :: head"></head>
+<style>
+    .profile-image {
+        margin-top: 10px;
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .profile-image-container {
+        position: relative;
+        height: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .file-input-label {
+        position: absolute;
+        bottom: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 8px 12px;
+        background-color: #e9ecef;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .file-input-label:hover {
+        background-color: #f8f9fa;
+    }
+</style>
+
+<body class="goto-here">
+    <div th:replace="fragment :: top"></div>
+
+    <nav th:replace="fragment :: nav"></nav>
+
+    <section class="">
+        <div class="container">
+            <div th:if="${success}" class="alert alert-success text-center">
+                <p th:text="${success}"></p>
+            </div>
+
+            <div th:if="${error}" class="text-center alert alert-danger">
+                <p th:text="${error}"></p>
+            </div>
+            
+            <div class="row mt-5">
+                <div class="col-md-12">
+                    <div class="col">
+			            <h2>Chi tiết đơn hàng</h2>
+			        </div>
+			        <div class="col text-right mb-2">
+			            <a th:href="@{/vegetfood/user(id=${userId})}"><i class="fa-solid fa-chevron-left"></i>&nbsp;Quay lại</a>
+			        </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Sản phẩm</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Đơn giá</th>
+                                <th>Số lượng</th>
+                                <th>Tổng tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="o : ${orders}">
+                                <td th:text="${o.product.id}"></td>
+                                <td>
+									<img style="height: 80px; width: 80px" th:src="@{'/images/' + ${o.product.image}}" />
+								</td>
+                                <td th:text="${o.product.name}"></td>
+                                <td th:text="${o.unitPrice}"></td>
+                                <td th:text="${o.quantity}"></td>
+                                <td th:text="${o.product.price * o.quantity}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer th:replace="fragment :: footer"></footer>
+
+    <!-- loader -->
+    <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
+            <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+            <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+                stroke="#F96D00" />
+        </svg></div>
+
+
+    <div th:replace="fragment :: script"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const avatarInput = document.getElementById('avatarInput');
+        const profileImage = document.getElementById('profileImage');
+
+        avatarInput.addEventListener('change', function (event) {
+            const input = event.target;
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    profileImage.src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        });
+    </script>
+
+</body>
+
+</html>

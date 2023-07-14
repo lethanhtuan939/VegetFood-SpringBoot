@@ -44,7 +44,9 @@ public class SecutiryConfig {
 					.requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
 					.requestMatchers("/vegetfood/auth/**").permitAll()
 					.requestMatchers("/vegetfood/add-to-cart/**").authenticated()
+					.requestMatchers("/vegetfood/user/**").authenticated()
 					.requestMatchers("/vegetfood/admin/**").hasAuthority("ADMIN")
+					.requestMatchers("/vegetfood/checkout").authenticated()
 					.anyRequest().permitAll()
 			)
 			.formLogin(form -> form

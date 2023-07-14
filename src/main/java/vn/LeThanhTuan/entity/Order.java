@@ -3,6 +3,8 @@ package vn.LeThanhTuan.entity;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -13,6 +15,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,8 +32,12 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
+	@Temporal(TemporalType.DATE)
 	private Date orderDate;
 	
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
+	@Temporal(TemporalType.DATE)
 	private Date deliveryDate;
 	
 	private double totalPrice;
@@ -40,7 +48,11 @@ public class Order {
 	
 	private String notes;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private String address;
+	
+	private String phoneNumber;
+	
+	@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	private User user;
 	

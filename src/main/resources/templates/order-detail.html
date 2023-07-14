@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head th:replace="fragmentAdmin :: head"></head>
+<style>
+	.align-middle {
+	  vertical-align: middle;
+	}
+	
+</style>
+<body>
+    <!-- Sidebar -->
+    <div class="container-fluid">
+        <div class="row">
+            <nav th:replace="fragmentAdmin :: sidebar">
+                
+            </nav>
+
+            <!-- Main Content -->
+            <main class="ml-sm-auto col-lg-10 main-content">
+                <div th:replace="fragmentAdmin :: header">
+                    
+                </div>
+
+                <div class="row mt-3">
+                    <div class="row">
+                        <form class="form-inline d-flex flex-row col-5" th:action="@{/vegetfood/admin/order}" method="get">
+                            <input type="search" class="form-control" name="keyword" th:value="${keyword}" placeholder="Tìm kiếm...">
+                            <button type="submit" class="btn btn-primary mx-2 col-2">
+                                <i class="fa-solid fa-magnifying-glass"></i></button>
+                        </form>
+                        <div class="d-flex justify-content-end col-6 mt-2">
+				            <a th:href="@{/vegetfood/admin/order(p=${currentPage})}"><i class="fa-solid fa-chevron-left"></i>&nbsp;Quay lại</a>
+				        </div>
+                    </div>
+                    <div class="container mt-3">
+                    	<div th:if="${success}" class="alert alert-success text-center">
+			            	<p th:text="${success}"></p>
+			            </div>
+			            
+						<div th:if = "${error}" class="text-center alert alert-danger">
+			                <p th:text="${error}"></p>
+			            </div>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+	                                <th>#</th>
+	                                <th>Sản phẩm</th>
+	                                <th>Tên sản phẩm</th>
+	                                <th>Đơn giá</th>
+	                                <th>Số lượng</th>
+	                                <th>Tổng tiền</th>
+	                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="o : ${orders}">
+	                                <td th:text="${o.product.id}" class="align-middle"></td>
+	                                <td class="align-middle">
+										<img style="height: 80px; width: 80px" th:src="@{'/images/' + ${o.product.image}}" />
+									</td>
+	                                <td class="align-middle" th:text="${o.product.name}"></td>
+	                                <td class="align-middle" th:text="${o.unitPrice}"></td>
+	                                <td class="align-middle" th:text="${o.quantity}"></td>
+	                                <td class="align-middle" th:text="${o.product.price * o.quantity}"></td>
+	                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <div th:replace="fragmentAdmin :: script"></div>
+    <script type="text/javascript">
+	    
+    </script>
+</body>
+
+</html>

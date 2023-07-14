@@ -41,7 +41,7 @@
 
     <nav th:replace="fragment :: nav"></nav>
 
-    <section class="ftco-section">
+    <section class="">
         <div class="container">
             <div th:if="${success}" class="alert alert-success text-center">
                 <p th:text="${success}"></p>
@@ -70,17 +70,17 @@
                     <h2>Thông tin cá nhân</h2>
                     <div>
                         <div class="row">
-                        	<div class="mb-3 col-8">
-	                            <input type="hidden" th:value="${user.id}" th:field="*{id}">
-	                            <label for="nameInput" class="form-label">Tên:</label>
-	                            <input type="text" class="form-control" id="nameInput" th:field="*{name}"
-	                                th:value="${user.name}">
-	                        </div>
-	                        <div class="mb-3 col-4">
-	                            <label for="phoneNumber" class="form-label">Số điện thoại:</label>
-	                            <input type="text" class="form-control" id="phoneNumber" th:field="*{phoneNumber}"
-	                                th:value="${user.phoneNumber}">
-	                        </div>
+                            <div class="mb-3 col-8">
+                                <input type="hidden" th:value="${user.id}" th:field="*{id}">
+                                <label for="nameInput" class="form-label">Tên:</label>
+                                <input type="text" class="form-control" id="nameInput" th:field="*{name}"
+                                    th:value="${user.name}">
+                            </div>
+                            <div class="mb-3 col-4">
+                                <label for="phoneNumber" class="form-label">Số điện thoại:</label>
+                                <input type="text" class="form-control" id="phoneNumber" th:field="*{phoneNumber}"
+                                    th:value="${user.phoneNumber}">
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="emailInput" class="form-label">Email:</label>
@@ -92,51 +92,74 @@
                             <input type="text" class="form-control" id="addressInput" th:field="*{address}"
                                 th:value="${user.address}">
                         </div>
-                        <div class="mb-3">
-                            <label for="status" class="form-label">Trạng thái:</label>
-                            <input type="text" class="form-control col-md-2" id="status" readonly="readonly"
-                                th:field="*{active}" th:value="${user.active == true ? 'ACTIVE' : 'BLOCK'}">
-                        </div>
                         <button type="submit" class="btn btn-primary">Cập nhật</button>
                     </div>
                 </div>
             </form>
             <div class="row mt-5">
-                <div class="col-md-12">
-                    <h2>Order History</h2>
+            	<p th:text="${empty}" th:if="${empty != null}"></p>
+                <div class="col-md-12" th:if="${empty == null}">
+                    <h2>Lịch sử đặt hàng</h2>
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Product Name</th>
-                                <th>Quantity</th>
-                                <th>Price</th>
-                                <th>Action</th>
+                                <th>Mã đơn hàng</th>
+                                <th>Ngày đặt</th>
+                                <th>Số điện thoại</th>
+                                <th>Địa chỉ</th>
+                                <th>Phí ship</th>
+                                <th>Tổng tiền</th>
+                                <th>Trạng thái</th>
+                                <th>&nbsp;</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Product 1</td>
-                                <td>2</td>
-                                <td>$19.99</td>
+                            <tr th:each="o : ${orders}">
+                                <td th:text="${o.id}"></td>
+                                <td th:text="${o.orderDate}"></td>
+                                <td th:text="${o.phoneNumber}"></td>
+                                <td th:text="${o.address}"></td>
+                                <td th:text="${o.shippingFee}"></td>
+                                <td th:text="${o.totalPrice}"></td>
+                                <td th:text="${o.status}"></td>
                                 <td>
-                                    <button class="btn btn-danger">Cancel</button>
+                                    <a th:href="@{/vegetfood/user/order(oid=${o.id}, id=${user.id})}"
+                                        class="btn btn-primary"><i class="fa-solid fa-eye"></i></a>
+                                    <button th:attr="onclick='setIdToDelete(\'' + ${o.id} + '\')'" type="button"
+                                        class="btn btn-danger deleteButton" data-toggle="modal"
+                                        data-target="#deleteItem"
+                                        th:if="${o.status == 'CHỜ XÁC NHẬN'}"
+                                        th:classappend="${o.status != 'CHỜ XÁC NHẬN'} ? 'disabled' : ''">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>Product 2</td>
-                                <td>1</td>
-                                <td>$9.99</td>
-                                <td>
-                                    <button class="btn btn-danger">Cancel</button>
-                                </td>
-                            </tr>
-                            <!-- Add more rows for other order details -->
                         </tbody>
                     </table>
+                    <div class="row mt-5">
+                        <div class="col text-center">
+                            <div class="block-27">
+                                <ul>
+                                    <li th:if="${currentPage > 1}">
+                                        <a th:href="@{/vegetfood/user(id=${user.id}, p=${currentPage - 1})}">&lt;</a>
+                                    </li>
+                                    <li th:each="i: ${#numbers.sequence(1, totalPages)}"
+                                        th:classappend="${currentPage == i ? 'active' : ''}">
+                                        <a th:href="@{/vegetfood/user(id=${user.id}, p=${i})}" th:text="${i}"></a>
+                                    </li>
+                                    <li th:if="${currentPage < totalPages}">
+                                        <a th:href="@{/vegetfood/user(id=${user.id}, p=${currentPage + 1})}">&gt;</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <div class="mb-5"></div>
 
     <footer th:replace="fragment :: footer"></footer>
 
@@ -147,6 +170,26 @@
                 stroke="#F96D00" />
         </svg></div>
 
+    <div class="modal fade" id="deleteItem" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form th:action="@{/vegetfood/user/order(p=${currentPage}, id=${user.id})}" method="post" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Hủy đơn hàng</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="close-button">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc muốn hủy đơn hàng này không?</p>
+                    <input type="hidden" name="oid" id="idToDelete">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary close-button" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-danger">Xác nhận</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <div th:replace="fragment :: script"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
@@ -164,6 +207,29 @@
                 reader.readAsDataURL(input.files[0]);
             }
         });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var deleteButtons = document.querySelectorAll(".deleteButton");
+            var closeButtons = document.querySelectorAll(".close-button");
+            var deleteItemModal = new bootstrap.Modal(document.getElementById("deleteItem"));
+
+            deleteButtons.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    deleteItemModal.show();
+                });
+            });
+
+            closeButtons.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    deleteItemModal.hide();
+                });
+            });
+        });
+
+        function setIdToDelete(id) {
+            document.getElementById('idToDelete').value = id;
+        }
+
     </script>
 
 </body>

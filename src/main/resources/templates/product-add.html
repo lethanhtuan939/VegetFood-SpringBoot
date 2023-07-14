@@ -18,7 +18,7 @@
                 <div class="row mt-3">
                     <h2 class="mb-3">Thêm sản phẩm</h2>
                     <div class="container">
-                    	<form class="row" th:action="@{/vegetfood/admin/product/add}" method="post" th:object="${product}" enctype="multipart/form-data">
+                    	<form class="row" th:action="@{/vegetfood/admin/product/add(p=${currentPage})}" method="post" th:object="${product}" enctype="multipart/form-data">
 						    <div class="col-md-3 my-2">
 						        <label for="category" class="form-label">Loại sản phẩm</label>
 						        <select id="category" class="form-select" th:field="*{category.id}">

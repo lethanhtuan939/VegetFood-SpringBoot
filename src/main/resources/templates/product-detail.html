@@ -31,8 +31,8 @@
 			</div>
 			<div class="row">
 				<div class="col-lg-6 mb-5 ftco-animate">
-					<a href="images/product-1.jpg" class="image-popup">
-						<img th:src="@{'/images/' + ${product.image}}" class="img-fluid" alt="Colorlib Template"></a>
+					<a class="image-popup">
+						<img th:src="@{'/images/' + ${product.image}}" class="img-fluid"></a>
 				</div>
 				<form th:action="@{/vegetfood/add-to-cart}" method="get"
 					class="col-lg-6 product-details pl-md-5 ftco-animate">
@@ -55,7 +55,7 @@
 							<a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">Sold</span></a>
 						</p>
 					</div>
-					<p class="price"><span th:text="'$'+${product.price}"></span></p>
+					<p class="price"><span th:text="${product.price} +'VND'"></span></p>
 					<p th:text="${product.description}"></p>
 					<div class="row mt-4">
 						<div class="w-100"></div>
@@ -74,9 +74,7 @@
 							</span>
 						</div>
 						<div class="w-100"></div>
-						<div class="col-md-12">
-							<p style="color: #000;">600 kg available</p>
-						</div>
+						
 					</div>
 					<p><input type="submit" class="btn btn-black py-3 px-5" value="Thêm vào giỏ hàng" /></p>
 				</form>
@@ -107,14 +105,14 @@
 							<div class="d-flex">
 								<div class="pricing">
 									<p class="price">
-										<span class="mr-2 price-dc" th:text="'$'+${p.price}"></span>
-										<span class="price-sale" th:text="'$'+${p.price}"></span>
+										<span class="mr-2 price-dc" th:text="${p.price}"></span>
+										<span class="price-sale" th:text="${p.price} + 'VND'"></span>
 									</p>
 								</div>
 							</div>
 							<div class="bottom-area d-flex px-3">
 								<div class="m-auto d-flex">
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
+									<a th:href="@{/vegetfood/add-to-cart(id=${p.id}, quantity=1)}" class="buy-now d-flex justify-content-center align-items-center mx-1">
 										<span><i class="fa-solid fa-cart-shopping"></i></span>
 									</a>
 									<a href="#" class="heart d-flex justify-content-center align-items-center ">

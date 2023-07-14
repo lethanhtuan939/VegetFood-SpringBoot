@@ -50,8 +50,7 @@
 							</thead>
 							<tbody>
 								<tr class="text-center" th:each="c : ${carts}">
-									<form th:action="@{/vegetfood/cart/update}" method="get"
-									      th:id="'form-' + ${c.value.product.id}">
+									<form th:action="@{/vegetfood/cart/update}" method="get" th:id="'form-' + ${c.value.product.id}">
 										<input type="hidden" th:value="${c.value.product.id}" name="id">
 										<td class="image-prod">
 											<div class="img"
@@ -100,8 +99,9 @@
 							</tbody>
 						</table>
 					</div>
-					<a th:href="@{/vegetfood/shop}" class="btn btn-primary d-flex justify-content-center mx-auto">Tiếp
-						tục mua sắm</a>
+					 <p class="text-center">
+			          	 <a th:href="@{/vegetfood/shop}">Tiếp tục mua sắm</a>
+			          </p>
 				</div>
 			</div>
 			<div class="row justify-content-end" th:if="${session.user != null}">
@@ -139,21 +139,21 @@
 					<div class="cart-total mb-3">
 						<h3>Tổng tiền</h3>
 						<p class="d-flex">
-							<span>Tạm tính</span> <span th:text="'$'+${totalPrice}"></span>
+							<span>Tạm tính</span> <span th:text="${totalPrice} + ' VND'"></span>
 						</p>
 						<p class="d-flex">
-							<span>Phí vận chuyển</span> <span>$0.00</span>
+							<span>Phí vận chuyển</span> <span>0 VND</span>
 						</p>
 						<p class="d-flex">
-							<span>Giảm giá</span> <span>$0.00</span>
+							<span>Giảm giá</span> <span>0 VND</span>
 						</p>
 						<hr>
 						<p class="d-flex total-price">
-							<span>Tổng cộng</span> <span th:text="'$'+${totalPrice}"></span>
+							<span>Tổng cộng</span> <span th:text="${totalPrice} + ' VND'"></span>
 						</p>
 					</div>
 					<p>
-						<a href="checkout.html" class="btn btn-primary py-3 px-4">Thanh toán</a>
+						<a th:href="@{/vegetfood/checkout}" th:classappend="${empty != null} ? 'disabled' : ''" class="btn btn-primary py-3 px-4">Thanh toán</a>
 					</p>
 				</div>
 			</div>

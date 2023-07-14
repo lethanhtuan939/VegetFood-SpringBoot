@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 Page Not Found</title>
+
+  <link rel="icon" th:href="@{/images/VEGETFOOD.png}" type="image/x-icon" />
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css">
+  <style>
+        body {
+            background-color: #f1f5f8;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        h1 {
+            font-size: 48px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            color: #67717e;
+            margin-bottom: 30px;
+        }
+
+        .emoji {
+            font-size: 80px;
+            margin-bottom: 30px;
+        }
+
+        .button {
+            font-size: 18px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+  <h1>Oops! 403 FORBIDDEN</h1>
+  <p>We're sorry, but you don't have permission to access this url!</p>
+  <img th:src="@{/images/403.jpg}" width="50%" alt="">
+  <div class="emoji">😞</div>
+  <a th:href="@{/vegetfood}" class="btn btn-primary">Go Back to Homepage</a>
+</div>
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

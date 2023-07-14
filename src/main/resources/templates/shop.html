@@ -66,13 +66,13 @@
 								<div class="pricing">
 									<p class="price">
 										<span class="mr-2 price-dc" th:text="'$'+${p.price}"></span>
-										<span class="price-sale" th:text="'$'+${p.price}"></span>
+										<span class="price-sale" th:text="${p.price} + 'VND'"></span>
 									</p>
 								</div>
 							</div>
 							<div class="bottom-area d-flex px-3">
 								<div class="m-auto d-flex">
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
+									<a th:href="@{/vegetfood/add-to-cart(id=${p.id}, quantity=1)}" class="buy-now d-flex justify-content-center align-items-center mx-1">
 										<span><i class="fa-solid fa-cart-shopping"></i></span>
 									</a>
 									<a href="#" class="heart d-flex justify-content-center align-items-center ">
@@ -89,13 +89,13 @@
 					<div class="block-27">
 						<ul>
 							<li th:if="${currentPage > 1}">
-								<a th:href="@{/vegetfood/shop(p=${currentPage - 1}, keyword=${keyword})}">&lt;</a>
+								<a th:href="@{/vegetfood/shop(p=${currentPage - 1}, keyword=${keyword}, category=${selectedCategory})}">&lt;</a>
 							</li>
 							<li th:each="i: ${#numbers.sequence(1, totalPages)}" th:classappend="${currentPage == i ? 'active' : ''}">
-								<a th:href="@{/vegetfood/shop(p=${i}, keyword=${keyword})}" th:text="${i}"></a>
+								<a th:href="@{/vegetfood/shop(p=${i}, keyword=${keyword}, category=${selectedCategory})}" th:text="${i}"></a>
 							</li>
 							<li th:if="${currentPage < totalPages}">
-								<a th:href="@{/vegetfood/shop(p=${currentPage + 1}, keyword=${keyword})}">&gt;</a>
+								<a th:href="@{/vegetfood/shop(p=${currentPage + 1}, keyword=${keyword}, category=${selectedCategory})}">&gt;</a>
 							</li>
 						</ul>
 					</div>
