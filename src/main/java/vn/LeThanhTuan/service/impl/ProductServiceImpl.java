@@ -1,8 +1,10 @@
 package vn.LeThanhTuan.service.impl;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,6 +152,13 @@ public class ProductServiceImpl implements ProductService {
 		Product product = optional.get();
 		
 		return toDto(product);
+	}
+	
+	@Override
+	public List<ProductDto> findTop8Product() {
+		List<Product> products = productRepository.findTop8ByOrderByIdDesc();
+		
+		return products.stream().map(this::toDto).collect(Collectors.toList());
 	}
 
 }

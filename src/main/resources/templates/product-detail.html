@@ -39,21 +39,15 @@
 					<input type="hidden" name="id" th:value="${product.id}">
 					<h3 th:text="${product.name}"></h3>
 					<div class="rating d-flex">
-						<p class="text-left mr-4">
-							<a href="#" class="mr-2">5.0</a>
-							<a href="#"><span class="ion-ios-star-outline"></span></a>
-							<a href="#"><span class="ion-ios-star-outline"></span></a>
-							<a href="#"><span class="ion-ios-star-outline"></span></a>
-							<a href="#"><span class="ion-ios-star-outline"></span></a>
-							<a href="#"><span class="ion-ios-star-outline"></span></a>
+						<a class="mr-2">5.0</a>
+						<p class="text-left mr-4" style="color: #fde047;">
+							<a ><span class="fa-solid fa-star"></span></a>
+							<a ><span class="fa-solid fa-star"></span></a>
+							<a ><span class="fa-solid fa-star"></span></a>
+							<a ><span class="fa-solid fa-star"></span></a>
+							<a ><span class="fa-solid fa-star"></span></a>
 						</p>
-						<p class="text-left mr-4">
-							<a href="#" class="mr-2" style="color: #000;">100 <span
-									style="color: #bbb;">Rating</span></a>
-						</p>
-						<p class="text-left">
-							<a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">Sold</span></a>
-						</p>
+						
 					</div>
 					<p class="price"><span th:text="${product.price} +'VND'"></span></p>
 					<p th:text="${product.description}"></p>
@@ -66,7 +60,7 @@
 								</button>
 							</span>
 							<input type="text" id="quantity" name="quantity" value="1" class="form-control input-number"
-								min="1" max="100">
+								min="1" max="100" readonly="readonly">
 							<span class="input-group-btn ml-2">
 								<button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
 									<i class="fa-solid fa-plus"></i>
@@ -113,10 +107,7 @@
 							<div class="bottom-area d-flex px-3">
 								<div class="m-auto d-flex">
 									<a th:href="@{/vegetfood/add-to-cart(id=${p.id}, quantity=1)}" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="fa-solid fa-cart-shopping"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="fa-solid fa-heart"></i></span>
+										<span><i class="fa-solid fa-cart-shopping"></i>&nbsp;Thêm vào giỏ hàng</span>
 									</a>
 								</div>
 							</div>

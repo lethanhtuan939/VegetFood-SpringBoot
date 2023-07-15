@@ -8755,7 +8755,7 @@ h1, h2, h3, h4, h5,
       transition: all 0.3s ease; }
     .product .text .bottom-area {
       position: absolute;
-      bottom: 15px;
+      bottom: 0px;
       left: 0;
       right: 0;
       opacity: 0;
@@ -8768,13 +8768,10 @@ h1, h2, h3, h4, h5,
         color: #fff;
         width: 100%;
         background: #82ae46;
-        width: 40px;
-        height: 40px;
+        padding: 10px;
         margin: 0 auto;
-        -webkit-border-radius: 50%;
-        -moz-border-radius: 50%;
-        -ms-border-radius: 50%;
-        border-radius: 50%; }
+        border-radius: 10px;
+         }
       .product .text .bottom-area .m-auto {
         margin: 0 auto; }
   .product:hover {

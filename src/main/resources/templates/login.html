@@ -10,6 +10,7 @@
     <!-- MDB -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet" />
     <meta charset="UTF-8">
+    <link rel="icon" th:href="@{/images/VEGETFOOD.png}" type="image/x-icon" />
     <title>Đăng nhập</title>
 </head>
 
@@ -39,13 +40,12 @@
 								Quay lại</a>
 	                        </div>
                             <p class="lead fw-normal mb-0 me-3">Đăng nhập với</p>
-                            <button type="button" class="btn btn-primary btn-floating mx-1">
-                                <i class="fab fa-facebook-f"></i>
-                            </button>
-
-                            <button type="button" class="btn btn-primary btn-floating mx-1">
+                            <a th:href="@{/oauth2/authorization/google}" class="btn btn-primary btn-floating mx-1">
                                 <i class="fab fa-google"></i>
-                            </button>
+                            </a>
+                            <a th:href="@{/oauth2/authorization/facebook}" class="btn btn-primary btn-floating mx-1">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
                         </div>
                         
                         <div th:if="${success}" class="alert alert-success text-center">

@@ -1,5 +1,6 @@
 package vn.LeThanhTuan.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -22,4 +23,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 	
 	@Query("SELECT p FROM Product p WHERE p.active = true AND p.id = ?1 AND p.category.active = true")
 	Optional<Product> findActiveProduct(Integer id);
+	
+	List<Product> findTop8ByOrderByIdDesc();
 }

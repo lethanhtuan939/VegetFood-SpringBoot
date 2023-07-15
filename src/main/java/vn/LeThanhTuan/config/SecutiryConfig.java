@@ -36,6 +36,14 @@ public class SecutiryConfig {
 	CustomLogoutHandler logoutHandler;
 	
 	@Bean
+	public OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler() {
+		return new OAuth2AuthenticationSuccessHandler();
+	}
+	
+	@Autowired
+    CustomOAuth2UserService oauth2UserService;
+	
+	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		
 		http
@@ -46,7 +54,8 @@ public class SecutiryConfig {
 					.requestMatchers("/vegetfood/add-to-cart/**").authenticated()
 					.requestMatchers("/vegetfood/user/**").authenticated()
 					.requestMatchers("/vegetfood/admin/**").hasAuthority("ADMIN")
-					.requestMatchers("/vegetfood/checkout").authenticated()
+					.requestMatchers("/vegetfood/checkout/**").authenticated()
+					.requestMatchers(HttpMethod.POST).authenticated()
 					.anyRequest().permitAll()
 			)
 			.formLogin(form -> form
@@ -58,6 +67,13 @@ public class SecutiryConfig {
 					.usernameParameter("email")
 					.passwordParameter("password")
 			)
+			.oauth2Login(oauth2 -> oauth2
+					.loginPage("/vegetfood/auth/login")
+	                .userInfoEndpoint(user -> user
+	                		.userService(oauth2UserService)
+	                )
+	                .successHandler(oAuth2AuthenticationSuccessHandler())
+	         )
 			.rememberMe(remember -> remember
 					.tokenValiditySeconds(30*24*60*60) // 30 days
 					.userDetailsService(userDetailsService())
@@ -67,7 +83,6 @@ public class SecutiryConfig {
 					.addLogoutHandler(logoutHandler)
 					.logoutSuccessUrl("/vegetfood")
 					.invalidateHttpSession(true)
-					.deleteCookies("JSESSIONID")
 			);
 		
 		return http.build();

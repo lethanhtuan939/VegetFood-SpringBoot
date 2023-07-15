@@ -1,6 +1,7 @@
 package vn.LeThanhTuan.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,5 +19,7 @@ public interface ProductService {
 	Page<ProductDto> getAllProductByCategoryId(String keyword, int pageNumber, int amountPage, Integer categoryId);
 
 	ProductDto getProductById(Integer id);
+
+	List<ProductDto> findTop8Product();
 
 }

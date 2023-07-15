@@ -51,7 +51,7 @@ public class User implements UserDetails {
     
     private String phoneNumber;
 
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns=@JoinColumn(name="user",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name="role", referencedColumnName = "id")
@@ -60,7 +60,6 @@ public class User implements UserDetails {
       
     @OneToMany(mappedBy = "user")
 	private List<Order> orders;
-
 
 	@Override
 	public List<SimpleGrantedAuthority> getAuthorities() {

@@ -1,10 +1,12 @@
 package vn.LeThanhTuan.entity.dto;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import vn.LeThanhTuan.entity.Role;
 
 @Data
 public class UserDto implements Serializable {
@@ -29,5 +31,7 @@ public class UserDto implements Serializable {
     private String phoneNumber;
 
     private boolean active;
+    
+    private Set<Role> roles;
     
 }

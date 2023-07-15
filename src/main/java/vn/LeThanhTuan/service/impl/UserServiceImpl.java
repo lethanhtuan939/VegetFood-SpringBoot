@@ -85,6 +85,7 @@ public class UserServiceImpl implements UserService {
 			
 			return toDto(savedUser);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}

@@ -40,7 +40,10 @@ public class ShopController {
 	UserService userService;
 
     @GetMapping()
-    public String demo() {
+    public String home(Model model) {
+    	List<ProductDto> products = productService.findTop8Product();
+    	
+    	model.addAttribute("products", products);
     	
         return "index";
     }
@@ -88,6 +91,10 @@ public class ShopController {
 	public String addToCart(@RequestParam("id") Integer id, @RequestParam("quantity") Integer quantity,
 							Principal principal, HttpSession session, RedirectAttributes model) {
 		String email = principal.getName();
+		if(email == null) {
+			UserDto dto = (UserDto) session.getAttribute("user");
+			email = dto.getEmail();
+		}
 		UserDto user = userService.findByEmail(email);
 		
 		Map<Integer, ShoppingCart> carts = cartServive.addToCart(user, session, id, quantity);
