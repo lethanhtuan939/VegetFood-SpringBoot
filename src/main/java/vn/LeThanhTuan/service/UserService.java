@@ -20,4 +20,8 @@ public interface UserService {
 
 	UserDto updateUser(UserDto userDto, MultipartFile file) throws IOException;
 
+	UserDto changePassword(String password, UserDto userDto);
+
+	boolean comparePassword(UserDto userDto, String password);
+
 }

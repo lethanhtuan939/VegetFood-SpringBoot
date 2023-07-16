@@ -1,5 +1,7 @@
 package vn.LeThanhTuan.controller;
 
+import java.io.UnsupportedEncodingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import vn.LeThanhTuan.entity.dto.UserDto;
@@ -88,9 +91,6 @@ public class AuthController {
 								@ModelAttribute("otpCode") int otpCode,
 								HttpSession session) {
 		
-		System.out.println("OTP: " + otp);
-		System.out.println("OTP CODE: " + otpCode);
-		
 		UserDto userDto = (UserDto) session.getAttribute("user");
 		System.out.println(userDto);
 		if (otp != otpCode) {
@@ -117,5 +117,88 @@ public class AuthController {
 	public String login() {
 		
 		return "login";
+	}
+	
+	@GetMapping("/forget-password")
+	public String forgetPasswod() {
+		
+		return "forget-password";
+	}
+	
+	@PostMapping("/forget-password")
+	public String postEmail(@RequestParam("email") String email,
+							RedirectAttributes attributes) throws UnsupportedEncodingException, MessagingException {
+		
+		int otpCode = userService.sendOTPMail(email);
+		
+		attributes.addFlashAttribute("otpCode", otpCode);
+		attributes.addFlashAttribute("email", email);
+		
+		return "redirect:vertify-email";
+	}
+	
+	@GetMapping("/vertify-email")
+	public String vertifyEmail() {
+		
+		return "vertify-email";
+	}
+	
+	@PostMapping("/vertify-email")
+	public String postVertifyEmail(Model model, @RequestParam("otp") int otp,
+									RedirectAttributes attributes,
+									@ModelAttribute("otpCode") int otpCode,
+									@ModelAttribute("email") String email,
+									HttpSession session) {
+		if(otp != otpCode) {
+			model.addAttribute("error", "Mã xác thực không chính xác!");
+			model.addAttribute("otpCode", otpCode);
+
+			return "vertify-email";
+		}
+		
+		attributes.addFlashAttribute("email", email);
+		
+		return "redirect:new-password";
+	}
+	
+	@GetMapping("/new-password")
+	public String rewritePasswod() {
+		
+		return "rewrite-password";
+	}
+	
+	@PostMapping("/new-password")
+	public String changePasswod(@RequestParam("password") String password, 
+								@RequestParam("repeat-password") String repeatPassword,
+								@ModelAttribute("email") String email,
+								Model model) {
+		
+		if(password.length() < 6) {
+			model.addAttribute("error", "Mật khảu phải nhiều hơn 6 kí tự!");
+			
+			return "rewrite-password";
+		}
+		
+		if(!(password.equals(repeatPassword))) {
+			model.addAttribute("error", "Mật khảu và mật khẩu nhập lại không khớp!");
+			
+			return "rewrite-password";
+		}
+		
+		UserDto userDto = userService.findByEmail(email);
+		if(userService.comparePassword(userDto, repeatPassword)) {
+			model.addAttribute("error", "Mật khảu mới phải khác mật khẩu trước đó!");
+			
+			return "rewrite-password";
+		}
+		
+		UserDto changedUser = userService.changePassword(password, userDto);
+		if(changedUser == null) {
+			model.addAttribute("error", "Lỗi hệ thống!");
+			
+			return "rewrite-password";
+		}
+		
+		return "redirect:login";
 	}
 }

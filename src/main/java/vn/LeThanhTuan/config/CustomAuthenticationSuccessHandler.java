@@ -31,6 +31,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		 user.setActive(authUser.isActive());
 		 user.setImage(authUser.getImage());
 		 user.setPhoneNumber(authUser.getPhoneNumber());
+		 user.setRoles(authUser.getRoles());
 		 
 		 session.setAttribute("user", user);
 		 

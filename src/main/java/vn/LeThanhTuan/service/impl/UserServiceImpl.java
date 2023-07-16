@@ -163,4 +163,22 @@ public class UserServiceImpl implements UserService {
 		
 		return toDto(updatedUser);
 	}
+	
+	@Override
+	public UserDto changePassword(String password, UserDto userDto) {
+		try {
+			User user = toUser(userDto);
+			user.setPassword(passwordEncoder.encode(password));
+			
+			return toDto(userRepository.save(user));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public boolean comparePassword(UserDto userDto, String password) {
+		return passwordEncoder.matches(password, userDto.getPassword());
+	}
 }

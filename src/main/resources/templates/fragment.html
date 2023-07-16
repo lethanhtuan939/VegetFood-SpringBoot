@@ -94,7 +94,7 @@
                         <div class="dropdown-menu" aria-labelledby="dropdown06">
                             <a class="dropdown-item" th:href="@{/vegetfood/user(id=${session.user.id})}">Thông tin cá
                                 nhân</a>
-                            <a class="dropdown-item" th:href="@{/vegetfood/admin}">Quản lý</a>
+                            <a th:if="${session.user.roles[0].name == 'ADMIN'}" class="dropdown-item" th:href="@{/vegetfood/admin}">Quản lý</a>
                             <a class="dropdown-item" th:href="@{/vegetfood/logout}">Đăng xuất</a>
                         </div>
                     </li>

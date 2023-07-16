@@ -15,21 +15,21 @@
         <div class="shadow">
             <div class="py-3">
                 <h3 class="text-center">Vui lòng kiểm tra email của bạn để nhận mã OTP!</h3>
-                <p class="text-center">Thiết lập 1 tài khoản mới</p>
+                <p class="text-center">Xác thực tài khoản</p>
             </div>
             
             <div th:if="${error}" class="alert alert-danger">
             	<p th:text="${error}" class="text-center"></p>
-           </div>
+           	</div>
 
-            <form th:action="@{vertify}" class="d-flex flex-row justify-content-center" method="post">
+            <form th:action="@{vertify-email}" class="d-flex flex-row justify-content-center" method="post">
                 <div class="d-flex flex-column align-items-center mb-4 col-md-4">
                     <div class="form-outline flex-fill mb-0">
                         <input name="otp" type="number" class="form-control" id="otp" required="required"/>
-                        <label class="form-label" for="otp">Nhập mã OTP để xác thực tài khoản</label>
+                        <label class="form-label" for="otp">Nhập mã OTP để xác thực email</label>
                     </div>
                     <input type="hidden" th:value="${otpCode}" name="otpCode">
-                    <input type="hidden" th:value="${user}" name="otpCode">
+                    <input type="hidden" th:value="${email}" name="email">
                     <button type="submit" class="btn btn-primary col-12 mt-3">Xác nhận</button>
                 </div>
             </form>
