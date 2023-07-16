@@ -123,7 +123,7 @@
                                 <td th:text="${o.totalPrice}"></td>
                                 <td th:text="${o.status}"></td>
                                 <td>
-                                    <a th:href="@{/vegetfood/user/order(oid=${o.id}, id=${user.id})}"
+                                    <a th:href="@{/vegetfood/user/order(oid=${o.id}, id=${user.id}, p=${currentPage})}"
                                         class="btn btn-primary"><i class="fa-solid fa-eye"></i></a>
                                     <button th:attr="onclick='setIdToDelete(\'' + ${o.id} + '\')'" type="button"
                                         class="btn btn-danger deleteButton" data-toggle="modal"

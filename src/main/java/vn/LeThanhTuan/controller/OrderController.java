@@ -25,7 +25,7 @@ public class OrderController {
 
 	@GetMapping
 	public String getOrder(Model model, @RequestParam(value = "p", defaultValue = "1") int pageIndex,
-			@RequestParam(value = "keyword", defaultValue = "") String keyword) {
+							@RequestParam(value = "keyword", defaultValue = "") String keyword) {
 		Page<Order> page = orderService.getAllOrder(pageIndex, keyword, 5);
 		List<Order> orders = page.getContent();
 		int totalPages = page.getTotalPages();
@@ -53,7 +53,7 @@ public class OrderController {
 
 	@GetMapping("/detail")
 	public String getOrderDetail(Model model, @RequestParam("oid") Integer id,
-			@RequestParam(value = "p", defaultValue = "1") int pageIndex) {
+								@RequestParam(value = "p", defaultValue = "1") int pageIndex) {
 		List<OrderDetail> orderDetails = orderService.getOrderDetailByOrderId(id);
 
 		model.addAttribute("orders", orderDetails);

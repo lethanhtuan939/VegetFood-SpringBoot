@@ -21,7 +21,8 @@
 
 <section class="ftco-section">
     <div class="container">
-        <form th:action="@{/vegetfood/checkout-success}" method="post" class="row justify-content-center">
+        <form th:action="@{/vegetfood/checkout-success}" method="post" class="row justify-content-center" id="checkoutForm">
+        	<input type="hidden" th:value="${totalPrice}" name="totalPrice" id="totalPrice">
             <div class="col-xl-7 ftco-animate">
                 <div class="billing-form">
                     <h3 class="mb-4 billing-heading">Chi tiết hóa đơn</h3>
@@ -94,21 +95,21 @@
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <div class="radio">
-                                        <label><input type="radio" value="1" name="optradio" class="mr-2"> Thanh toán khi nhận hàng</label>
+                                        <label><input type="radio" value="1" name="optradio" class="mr-2" required="required"> Thanh toán khi nhận hàng</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <div class="radio">
-                                        <label><input type="radio" value="2" name="optradio" class="mr-2"> Thanh toán bằng Paypal</label>
+                                        <label><input onclick="updateFormAction(this)" type="radio" value="2" name="optradio" class="mr-2" required="required"> Thanh toán bằng VNPay</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <div class="checkbox">
-                                        <label><input type="checkbox" checked value="" class="mr-2"> Tôi đã đọc và đồng ý với các điều khoản</label>
+                                        <label><input onclick="updateFormAction(this)" type="checkbox" checked value="" class="mr-2"> Tôi đã đọc và đồng ý với các điều khoản</label>
                                     </div>
                                 </div>
                             </div>
@@ -168,6 +169,17 @@
 		    });
 		    
 		});
+		
+		function updateFormAction(radioButton) {
+			var form = radioButton.form;
+		    var actionUrl;
+		    if (radioButton.value === "1") {
+		        actionUrl = "/vegetfood/checkout-success";
+		    } else if (radioButton.value === "2") {
+		        actionUrl = "/vegetfood/vnpay-payment?s=" + encodeURIComponent(document.getElementById("totalPrice").value);;
+		    }
+		    form.action = actionUrl;
+		}
 
 </script>
 

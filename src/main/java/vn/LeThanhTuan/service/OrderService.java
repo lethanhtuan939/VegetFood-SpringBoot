@@ -14,9 +14,9 @@ import vn.LeThanhTuan.entity.dto.UserDto;
 
 public interface OrderService {
 
-	double getTotalPrice(HttpSession session, UserDto userDto);
+	int getTotalPrice(HttpSession session, UserDto userDto);
 
-	void saveOrder(HttpSession session, UserDto userDto, String address, String phoneNumber) throws UnsupportedEncodingException, MessagingException, IOException;
+	void saveOrder(HttpSession session, UserDto userDto, String address, String phoneNumber, String payMethod, String status) throws UnsupportedEncodingException, MessagingException, IOException;
 
 	Page<Order> getOrderByUser(Integer id, int pageIndex);
 

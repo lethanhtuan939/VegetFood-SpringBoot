@@ -25,6 +25,7 @@
            <h2 class="text-center text-uppercase">Đặt hàng thành công!</h2>
            <p class="text-center">Chúc mừng [[${session.user.name}]] đã đặt hàng thành công!</p>
            <p class="text-center text-italic">Chúng tôi sẽ sớm giao hàng đến bạn, xin cảm ơn!</p>
+           <p class="text-center text-italic" th:text="${paymentMethod}"></p>
           <p class="text-center">
           	 <a th:href="@{/vegetfood/shop}">Tiếp tục mua sắm</a>
           </p>

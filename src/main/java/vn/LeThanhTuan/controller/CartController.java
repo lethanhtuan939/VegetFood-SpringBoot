@@ -40,7 +40,7 @@ public class CartController {
 		String cartKey = "cart_" + user.getId();
 		Map<Integer, ShoppingCart> carts = (Map<Integer, ShoppingCart>) session.getAttribute(cartKey);
 		
-		double totalPrice = 0;
+		int totalPrice = 0;
 		if(carts == null || carts.isEmpty()) {
 			model.addAttribute("empty", "Bạn chưa có sản phẩm nào trong giỏ hàng!");
 		} else {

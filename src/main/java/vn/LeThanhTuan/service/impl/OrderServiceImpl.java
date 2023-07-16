@@ -57,11 +57,11 @@ public class OrderServiceImpl implements OrderService {
 	private String fromEmail;
 
 	@Override
-	public double getTotalPrice(HttpSession session, UserDto userDto) {
+	public int getTotalPrice(HttpSession session, UserDto userDto) {
 		String cartKey = "cart_" + userDto.getId();
 		Map<Integer, ShoppingCart> carts = (Map<Integer, ShoppingCart>) session.getAttribute(cartKey);
 
-		double totalPrice = 0;
+		int totalPrice = 0;
 		Set<Integer> set = carts.keySet();
 
 		for (Integer item : set) {
@@ -72,17 +72,17 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public void saveOrder(HttpSession session, UserDto userDto, String address, String phoneNumber)
+	public void saveOrder(HttpSession session, UserDto userDto, String address, String phoneNumber, String payMethod, String status)
 			throws MessagingException, IOException {
 		String cartKey = "cart_" + userDto.getId();
 		Map<Integer, ShoppingCart> carts = (Map<Integer, ShoppingCart>) session.getAttribute(cartKey);
-		double totalPrice = getTotalPrice(session, userDto);
+		int totalPrice = getTotalPrice(session, userDto);
 
 		Order order = new Order();
 		order.setOrderDate(new Date());
 		order.setTotalPrice(totalPrice);
 		order.setShippingFee(0);
-		order.setStatus("CHỜ XÁC NHẬN");
+		order.setStatus(status);
 		order.setNotes("");
 		order.setAddress(address);
 		order.setPhoneNumber(phoneNumber);
@@ -90,7 +90,7 @@ public class OrderServiceImpl implements OrderService {
 		User user = userRepository.findById(userDto.getId()).orElse(null);
 		order.setUser(user);
 
-		orderRepository.save(order); // Save the order
+		orderRepository.save(order); 
 
 		List<OrderDetail> orderDetails = new ArrayList<>();
 
@@ -117,7 +117,7 @@ public class OrderServiceImpl implements OrderService {
 		session.setAttribute(cartKey, new HashMap<>());
 		session.setAttribute("totalItem", 0);
 
-		sendEmail(userDto.getEmail(), carts, userDto.getAddress(), totalPrice);
+		sendEmail(userDto.getEmail(), carts, userDto.getAddress(), totalPrice, payMethod);
 	}
 	
 	@Override
@@ -158,7 +158,7 @@ public class OrderServiceImpl implements OrderService {
 		return orderRepository.save(order);
 	}
 
-	public void sendEmail(String toEmail, Map<Integer, ShoppingCart> cartItems, String address, double totalPrice)
+	public void sendEmail(String toEmail, Map<Integer, ShoppingCart> cartItems, String address, int totalPrice, String payMethod)
 	        throws MessagingException, IOException {
 	    String toAddress = toEmail;
 	    String senderName = "VegetFood";
@@ -223,7 +223,8 @@ public class OrderServiceImpl implements OrderService {
 	    htmlBody.append("<p>").append(totalPrice).append("</p>");
 
 	    htmlBody.append("<h3>Phương thức thanh toán:</h3>");
-	    htmlBody.append("<p>Thanh toán khi nhận hàng</p>");
+	    htmlBody.append("<p>").append(payMethod).append("</p>");
+
 
 	    htmlBody.append("<h3>Ngày đặt hàng:</h3>");
 	    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");

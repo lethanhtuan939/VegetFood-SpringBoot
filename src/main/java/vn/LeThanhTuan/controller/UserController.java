@@ -77,11 +77,13 @@ public class UserController {
 	
 	@GetMapping("/order")
 	public String getOrderById(@RequestParam("oid") Integer id, Model model,
-								@RequestParam("id") Integer userId) {
+								@RequestParam("id") Integer userId,
+								@RequestParam(value = "p", defaultValue = "1") int pageIndex) {
 		List<OrderDetail> details = orderService.getOrderDetailByOrderId(id);
 		
 		model.addAttribute("orders", details);
 		model.addAttribute("userId", userId);
+		model.addAttribute("currentPage", pageIndex);
 		
 		return "order-user";
 	}
