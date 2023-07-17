@@ -56,8 +56,24 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
 		Authentication auth = new UsernamePasswordAuthenticationToken(email, password, authorities);
 		SecurityContextHolder.getContext().setAuthentication(auth);
 		session.setAttribute("user", userDto);
-       
-        response.sendRedirect("/vegetfood");
+		boolean redirectAdmin = false;
+		for (Role role : userDto.getRoles()) {
+		    if (role.getId() == 2) {
+		        redirectAdmin = true;
+		        break;
+		    }
+		}
+
+		try {
+		    if (redirectAdmin) {
+		        response.sendRedirect("/vegetfood/admin");
+		    } else {
+		        response.sendRedirect("/vegetfood");
+		    }
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
+
 	}
 
 

@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import vn.LeThanhTuan.entity.Category;
 import vn.LeThanhTuan.entity.Product;
 import vn.LeThanhTuan.entity.dto.ProductDto;
+import vn.LeThanhTuan.entity.dto.UserDto;
 import vn.LeThanhTuan.repository.CategoryRepository;
 import vn.LeThanhTuan.repository.ProductRepository;
 import vn.LeThanhTuan.service.ProductService;
@@ -157,6 +158,23 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<ProductDto> findTop8Product() {
 		List<Product> products = productRepository.findTop8ByOrderByIdDesc();
+		
+		return products.stream().map(this::toDto).collect(Collectors.toList());
+	}
+	
+	@Override
+	public long count() {
+		return productRepository.count();
+	}
+
+	@Override
+	public List<ProductDto> getListProduct(String keyword) {
+		List<Product> products;
+		if(keyword.trim().isEmpty()) {
+			products = productRepository.findAll();
+		} else {
+			products = productRepository.findAllByKeyword(keyword);
+		}
 		
 		return products.stream().map(this::toDto).collect(Collectors.toList());
 	}

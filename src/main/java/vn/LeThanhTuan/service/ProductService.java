@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 import vn.LeThanhTuan.entity.dto.ProductDto;
+import vn.LeThanhTuan.entity.dto.UserDto;
 
 public interface ProductService {
 
@@ -21,5 +22,9 @@ public interface ProductService {
 	ProductDto getProductById(Integer id);
 
 	List<ProductDto> findTop8Product();
+
+	long count();
+
+	List<ProductDto> getListProduct(String keyword);
 
 }

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head th:replace="fragmentAdmin :: head"></head>
+<style>
+	.align-middle {
+	  vertical-align: middle;
+	}
+
+</style>
+
+<body>
+    <!-- Sidebar -->
+    <div class="container-fluid">
+        <div class="row">
+            <nav th:replace="fragmentAdmin :: sidebar">
+
+            </nav>
+
+            <!-- Main Content -->
+            <main class="ml-sm-auto col-lg-10 main-content">
+                <div th:replace="fragmentAdmin :: header">
+
+                </div>
+
+                <div class="row mt-3">
+                    <div class="row">
+                        <form class="form-inline d-flex flex-row col-5" th:action="@{/vegetfood/admin/user}" method="get">
+                            <input type="hidden" name="p" th:value="1">
+                            <input type="search" class="form-control" name="keyword" th:value="${keyword}"
+                                placeholder="Tìm kiếm...">
+                            <button type="submit" class="btn btn-primary mx-2 col-2">
+                                <i class="fa-solid fa-magnifying-glass"></i></button>
+                        </form>
+                        <div class="d-flex justify-content-center align-items-center col-2">
+                            <a th:href="@{/vegetfood/admin/user/excel(keyword=${keyword})}" class="btn btn-info text-white">Xuất file Excel</a>
+                        </div>
+                    </div>
+                    <div class="container mt-3">
+                        <div th:if="${success}" class="alert alert-success text-center">
+                            <p th:text="${success}"></p>
+                        </div>
+
+                        <div th:if="${error}" class="text-center alert alert-danger">
+                            <p th:text="${error}"></p>
+                        </div>
+                        <table class="table table-striped text-center">
+                            <thead>
+                                <tr>
+                                    <th scope="col">&nbsp;</th>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Tên</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Số điện thoại</th>
+                                    <th scope="col">Địa chỉ</th>
+                                    <th scope="col">Trạng thái</th>
+                                    <th scope="col">Vai trò</th>
+                                    <th scope="col">&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="p : ${users}">
+                                    <td class="align-middle">
+                                        <img class="user-image" style="height: 80px; width: 80px" th:src="@{'/images/' + ${p.image}}" />
+                                    </td>
+                                    <td th:text="${p.id}" class="align-middle"></td>
+                                    <td th:text="${p.name}" class="align-middle"></td>
+                                    <td th:text="${p.email}" class="align-middle"></td>
+                                    <td th:text="${p.phoneNumber}" class="align-middle"></td>
+                                    <td th:text="${p.address}" class="align-middle" style="width: 250px;word-break: break-word;"></td>
+                                    <td th:value="${p.active}" class="align-middle">
+									    <span style="padding: 10px; border-radius: 5px; color: #fff;" th:text="${p.active == true ? 'ACTIVE' : 'BLOCK'}" 
+									          th:class="${p.active == false ? 'bg-danger' : 'bg-success'}">
+									    </span>
+									</td>
+									<td th:value="${p.roles[0].id}" class="align-middle">
+									    <span style="padding: 10px; border-radius: 5px; color: #fff;" th:text="${p.roles[0].name}" 
+									          th:class="${p.roles[0].name == 'ADMIN' ? 'bg-warning' : 'bg-info'}">
+									    </span>
+									</td>
+                                    <td class="align-middle">
+                                        <button type="button" class="btn-edit btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#editUser">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <nav aria-label="navigation">
+                            <ul class="pagination d-flex justify-content-end">
+                                <li class="page-item" th:if="${currentPage > 1}">
+                                    <a class="page-link" th:href="@{/vegetfood/admin/user(p=${currentPage - 1}, keyword=${keyword})}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item" th:each="i: ${#numbers.sequence(1, totalPages)}"
+                                    th:classappend="${currentPage == i ? 'active' : ''}">
+                                    <a class="page-link"
+                                        th:href="@{/vegetfood/admin/user(p=${i}, keyword=${keyword})}" th:text="${i}"></a>
+                                </li>
+                                <li class="page-item" th:if="${currentPage < totalPages}">
+                                    <a class="page-link" th:href="@{/vegetfood/admin/user(p=${currentPage + 1}, keyword=${keyword})}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal Edit -->
+    <div class="modal fade" id="editUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <form th:action="@{/vegetfood/admin/user/update(p=${currentPage})}" method="post" th:object="${user}"
+                class="modal-content" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title">Chỉnh sửa khách hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body row">
+                    <div class="col-md-2 my-2">
+                        <label for="id" class="form-label">ID</label>
+                        <input type="text" class="form-control" id="id" th:field="*{id}"
+                            readonly>
+                    </div>
+                    <div class="col-md-2 my-2">
+                        <label for="id" class="form-label">Vai trò</label>
+                        <select id="role" class="form-select" th:field="*{roles}">
+	                    	<option th:value="1">USER</option>
+	                        <option th:value="2">ADMIN</option>
+	                    </select>
+                    </div>
+                    <div class="col-md-4 my-2">
+                        <label for="category" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" th:field="*{email}" >
+                    </div>
+                    <div class="col-md-4 my-2">
+                        <label for="name" class="form-label">Tên</label>
+                        <input type="text" class="form-control" id="name"
+                            th:field="*{name}">
+                    </div>
+                    <div class="col-md-12 my-2">
+                        <label for="description" class="form-label">Địa chỉ</label>
+                        <textarea class="form-control" id="address" th:field="*{address}"></textarea>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Số điện thoại</label>
+                                <input type="number" class="form-control" id="phoneNumber" th:field="*{phoneNumber}">
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="mb-3">
+                                <label for="image" class="form-label">Hình ảnh</label>
+                                <input type="file" class="form-control" id="image" name="file">
+                                <img style="height: 50px; width: 50px;" class="mt-2" src="" alt="" id="img">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+	                        <label for="status" class="form-label">Trạng thái</label>
+	                        <select id="status" class="form-select" th:field="*{active}">
+	                            <option th:value="true">ACTIVE</option>
+	                            <option th:value="false">BLOCK</option>
+	                        </select>
+	                    </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <div th:replace="fragmentAdmin :: script"></div>
+    <script type="text/javascript">
+    $('.btn-edit').click(function () {
+        var id = $(this).closest('tr').find('td:eq(1)').text();
+        var name = $(this).closest('tr').find('td:eq(2)').text();
+        var email = $(this).closest('tr').find('td:eq(3)').text();
+        var phoneNumber = $(this).closest('tr').find('td:eq(4)').text();
+        var address = $(this).closest('tr').find('td:eq(5)').text();
+        var status = $(this).closest('tr').find('td:eq(6)').attr('value');
+        var roleId = $(this).closest('tr').find('td:eq(7)').attr('value');
+
+        var imageSrc = $(this).closest('tr').find('.user-image').attr('src');
+        
+        var imageName = imageSrc.substring(imageSrc.lastIndexOf('/') + 1);
+
+        // Set the values in the modal fields
+        $('#editUser #id').val(id);
+        $('#editUser #name').val(name);
+        $('#editUser #email').val(email);
+        $('#editUser #phoneNumber').val(phoneNumber);
+        $('#editUser #address').val(address);
+        $('#editUser #status option[value="' + status + '"]').prop('selected', true);
+        $('#editUser #role option[value="' + roleId + '"]').prop('selected', true);
+        $('#editUser #img').attr('src', imageSrc); 
+        $('#editUser #image').val(imageName); 
+    });
+    
+    const image = document.getElementById('img')
+    const input = document.getElementById('image')
+
+    input.addEventListener("change", () => {
+        image.src=URL.createObjectURL(input.files[0])
+    })
+    
+
+    </script>
+</body>
+
+</html>

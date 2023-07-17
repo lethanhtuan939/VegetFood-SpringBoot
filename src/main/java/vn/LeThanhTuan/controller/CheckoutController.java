@@ -19,6 +19,7 @@ import vn.LeThanhTuan.config.VNPayService;
 import vn.LeThanhTuan.entity.dto.UserDto;
 import vn.LeThanhTuan.service.OrderService;
 import vn.LeThanhTuan.service.UserService;
+import vn.LeThanhTuan.util.AppConstrant;
 
 @Controller
 @RequestMapping("/vegetfood")
@@ -55,14 +56,15 @@ public class CheckoutController {
 
 	@PostMapping("/checkout-success")
 	public String successCheckout(@RequestParam("address") String address,
-			@RequestParam("phoneNumber") String phoneNumber, Principal principal, HttpSession session, Model model)
-			throws MessagingException, IOException {
+								@RequestParam("phoneNumber") String phoneNumber,@RequestParam("note") String note,
+								Principal principal, HttpSession session, Model model)
+								throws MessagingException, IOException {
 		String email = principal.getName();
 		UserDto userDto = userService.findByEmail(email);
-		String payMethod = "Thanh toán khi nhận hàng";
-		String status = "CHỜ XÁC NHẬN";
+		String payMethod = AppConstrant.METHOD_PAY_RECEIVE;
+		String status = AppConstrant.STATUS_WAIT;
 
-		orderService.saveOrder(session, userDto, address, phoneNumber, payMethod, status);
+		orderService.saveOrder(session, userDto, address, phoneNumber, payMethod, status, note);
 		
 		model.addAttribute("paymentMethod", payMethod);
 
@@ -75,10 +77,10 @@ public class CheckoutController {
 		UserDto userDto = userService.findByEmail(email);
 		String address = userDto.getAddress();
 		String phoneNumber = userDto.getPhoneNumber();
-		String payMethod = "Đã thanh toán với VNPay";
-		String status = "ĐÃ THANH TOÁN";
+		String payMethod = AppConstrant.METHOD_PAY_VNPAY;
+		String status = AppConstrant.STATUS_PAY;
 
-		orderService.saveOrder(session, userDto, address, phoneNumber, payMethod, status);
+		orderService.saveOrder(session, userDto, address, phoneNumber, payMethod, status, "");
 		
 		model.addAttribute("paymentMethod", payMethod);
 

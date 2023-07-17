@@ -25,4 +25,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 	Optional<Product> findActiveProduct(Integer id);
 	
 	List<Product> findTop8ByOrderByIdDesc();
+	
+	@Query("SELECT p FROM Product p WHERE p.active = true AND (p.id LIKE %?1% OR p.name LIKE %?1% OR p.description LIKE %?1% OR p.price like %?1% OR p.category.name LIKE %?1%)")
+	List<Product> findAllByKeyword(String keyword);
 }

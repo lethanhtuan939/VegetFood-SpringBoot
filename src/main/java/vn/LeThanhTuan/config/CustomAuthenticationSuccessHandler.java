@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import vn.LeThanhTuan.entity.Role;
 import vn.LeThanhTuan.entity.User;
 import vn.LeThanhTuan.entity.dto.UserDto;
 
@@ -35,7 +36,24 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		 
 		 session.setAttribute("user", user);
 		 
-		 response.sendRedirect("vegetfood");
+		 boolean redirectAdmin = false;
+		 for (Role role : user.getRoles()) {
+		     if (role.getId() == 2) {
+		         redirectAdmin = true;
+		         break;
+		     }
+		 }
+
+		 try {
+		     if (redirectAdmin) {
+		         response.sendRedirect("/vegetfood/admin");
+		     } else {
+		         response.sendRedirect("/vegetfood");
+		     }
+		 } catch (IOException e) {
+		     e.printStackTrace();
+		 }
+
 	}
 	
 }

@@ -71,8 +71,7 @@
                 <ul class="navbar-nav ml-auto d-flex align-items-center">
                     <li class="nav-item"><a th:href="@{/vegetfood}" class="nav-link">Trang chủ</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{/vegetfood/shop}">Shop</a></li>
-                    <li class="nav-item"><a href="about.html" class="nav-link">Về chúng tôi</a></li>
-                    <li class="nav-item"><a href="contact.html" class="nav-link">Liên hệ</a></li>
+                    <li class="nav-item"><a th:href="@{/vegetfood/contact}" class="nav-link">Liên hệ</a></li>
                     <li th:if="${session.totalItem != null}" class="nav-item cta cta-colored"><a
                             th:href="@{/vegetfood/cart}" class="nav-link">
                             <span class="fa-solid fa-cart-shopping"></span>

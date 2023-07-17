@@ -3,10 +3,9 @@
 
 <head th:replace="fragmentAdmin :: head"></head>
 <style>
-	.align-middle {
-	  vertical-align: middle;
-	}
-
+    .align-middle {
+        vertical-align: middle;
+    }
 </style>
 
 <body>
@@ -25,16 +24,29 @@
 
                 <div class="row mt-3">
                     <div class="row">
-                        <form class="form-inline d-flex flex-row col-5" th:action="@{/vegetfood/admin/product}" method="get">
+                        <form class="form-inline d-flex flex-row col-4" th:action="@{/vegetfood/admin/product}"
+                            method="get">
                             <input type="hidden" name="p" th:value="1">
-                            <input type="search" class="form-control" name="keyword" th:value="${keyword}"
+                            <input type="search" class="form-control" id="keyword" name="keyword" th:value="${keyword}"
                                 placeholder="Tìm kiếm...">
                             <button type="submit" class="btn btn-primary mx-2 col-2">
                                 <i class="fa-solid fa-magnifying-glass"></i></button>
                         </form>
-
-                        <div class="d-flex justify-content-end col-7">
-                            <a th:href="@{/vegetfood/admin/product/add(p=${currentPage})}" type="button" class="btn btn-primary">
+						 <div class="d-flex justify-content-center align-items-center col-2">
+                            <label for="pageSize" class="col-7">Hiển thị:</label>
+			                <select id="pageSize" class="form-control" onchange="changePageSize()">
+			                    <option value="5" th:selected="${pageSize == 5}">5</option>
+			                    <option value="10" th:selected="${pageSize == 10}">10</option>
+			                    <option value="15" th:selected="${pageSize == 15}">15</option>
+			                    <option value="20" th:selected="${pageSize == 20}">20</option>
+			                </select>
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center col-2">
+                            <a th:href="@{/vegetfood/admin/product/excel(keyword=${keyword})}" class="btn btn-info text-white">Xuất file Excel</a>
+                        </div>
+                        <div class="d-flex justify-content-end col-4">
+                            <a th:href="@{/vegetfood/admin/product/add(p=${currentPage}, s=${pageSize})}" type="button"
+                                class="btn btn-primary">
                                 + Thêm sản phẩm mới
                             </a>
                         </div>
@@ -68,15 +80,18 @@
                                         style="width: 300px;word-break: break-word;"></td>
                                     <td th:text="${p.price}" class="align-middle"></td>
                                     <td class="align-middle">
-                                        <img class="product-image" style="height: 80px; width: 80px" th:src="@{'/images/' + ${p.image}}" />
+                                        <img class="product-image" style="height: 80px; width: 80px"
+                                            th:src="@{'/images/' + ${p.image}}" />
                                     </td>
-                                    <td th:text="${p.category.name}" class="align-middle" th:value="${p.category.id}"></td>
-                                   
+                                    <td th:text="${p.category.name}" class="align-middle" th:value="${p.category.id}">
+                                    </td>
+
                                     <td th:value="${p.active}" class="align-middle">
-									    <span style="padding: 10px; border-radius: 5px; color: #fff;" th:text="${p.active == true ? 'ACTIVE' : 'BLOCK'}" 
-									          th:class="${p.active == false ? 'bg-danger' : 'bg-success'}">
-									    </span>
-									</td>
+                                        <span style="padding: 10px; border-radius: 5px; color: #fff;"
+                                            th:text="${p.active == true ? 'ACTIVE' : 'BLOCK'}"
+                                            th:class="${p.active == false ? 'bg-danger' : 'bg-success'}">
+                                        </span>
+                                    </td>
                                     <td class="align-middle">
                                         <button type="button" class="btn-edit btn btn-primary" data-bs-toggle="modal"
                                             data-bs-target="#editProduct">
@@ -87,23 +102,28 @@
                             </tbody>
                         </table>
                         <nav aria-label="navigation">
-                            <ul class="pagination d-flex justify-content-end">
-                                <li class="page-item" th:if="${currentPage > 1}">
-                                    <a class="page-link" th:href="@{/vegetfood/admin/product(p=${currentPage - 1}, keyword=${keyword})}" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                                <li class="page-item" th:each="i: ${#numbers.sequence(1, totalPages)}"
-                                    th:classappend="${currentPage == i ? 'active' : ''}">
-                                    <a class="page-link"
-                                        th:href="@{/vegetfood/admin/product(p=${i}, keyword=${keyword})}" th:text="${i}"></a>
-                                </li>
-                                <li class="page-item" th:if="${currentPage < totalPages}">
-                                    <a class="page-link" th:href="@{/vegetfood/admin/product(p=${currentPage + 1}, keyword=${keyword})}" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                            </ul>
+                                <ul class="pagination d-flex justify-content-end">
+                                    <li class="page-item" th:if="${currentPage > 1}">
+                                        <a class="page-link"
+                                            th:href="@{/vegetfood/admin/product(p=${currentPage - 1}, keyword=${keyword}, s=${pageSize})}"
+                                            aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item" th:each="i: ${#numbers.sequence(1, totalPages)}"
+                                        th:classappend="${currentPage == i ? 'active' : ''}">
+                                        <a class="page-link"
+                                            th:href="@{/vegetfood/admin/product(p=${i}, keyword=${keyword}, s=${pageSize})}"
+                                            th:text="${i}"></a>
+                                    </li>
+                                    <li class="page-item" th:if="${currentPage < totalPages}">
+                                        <a class="page-link"
+                                            th:href="@{/vegetfood/admin/product(p=${currentPage + 1}, keyword=${keyword}, s=${pageSize})}"
+                                            aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
                         </nav>
                     </div>
                 </div>
@@ -120,12 +140,12 @@
                 <div class="modal-header">
                     <h5 class="modal-title">Chỉnh sửa sản phẩm</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <input type="hidden" class="form-control" id="currentPage" th:value="${currentPage}">
                 </div>
                 <div class="modal-body row">
                     <div class="col-md-2 my-2">
                         <label for="id" class="form-label">ID</label>
-                        <input type="text" class="form-control" id="id" placeholder="ID..." th:field="*{id}"
-                            readonly>
+                        <input type="text" class="form-control" id="id" placeholder="ID..." th:field="*{id}" readonly>
                     </div>
                     <div class="col-md-3 my-2">
                         <label for="category" class="form-label">Loại sản phẩm</label>
@@ -159,12 +179,12 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-	                        <label for="status" class="form-label">Trạng thái</label>
-	                        <select id="status" class="form-select" th:field="*{active}">
-	                            <option th:value="true">ACTIVE</option>
-	                            <option th:value="false">BLOCK</option>
-	                        </select>
-	                    </div>
+                            <label for="status" class="form-label">Trạng thái</label>
+                            <select id="status" class="form-select" th:field="*{active}">
+                                <option th:value="true">ACTIVE</option>
+                                <option th:value="false">BLOCK</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -178,35 +198,44 @@
     <!-- Bootstrap JS -->
     <div th:replace="fragmentAdmin :: script"></div>
     <script type="text/javascript">
-    $('.btn-edit').click(function () {
-        var id = $(this).closest('tr').find('td:eq(0)').text();
-        var name = $(this).closest('tr').find('td:eq(1)').text();
-        var description = $(this).closest('tr').find('td:eq(2)').text();
-        var price = $(this).closest('tr').find('td:eq(3)').text();
-        var category = $(this).closest('tr').find('td:eq(5)').attr('value');
-        var status = $(this).closest('tr').find('td:eq(6)').attr('value');
+        $('.btn-edit').click(function () {
+            var id = $(this).closest('tr').find('td:eq(0)').text();
+            var name = $(this).closest('tr').find('td:eq(1)').text();
+            var description = $(this).closest('tr').find('td:eq(2)').text();
+            var price = $(this).closest('tr').find('td:eq(3)').text();
+            var category = $(this).closest('tr').find('td:eq(5)').attr('value');
+            var status = $(this).closest('tr').find('td:eq(6)').attr('value');
 
-        var imageSrc = $(this).closest('tr').find('.product-image').attr('src');
+            var imageSrc = $(this).closest('tr').find('.product-image').attr('src');
+
+            var imageName = imageSrc.substring(imageSrc.lastIndexOf('/') + 1);
+
+            // Set the values in the modal fields
+            $('#editProduct #id').val(id);
+            $('#editProduct #name').val(name);
+            $('#editProduct #description').val(description);
+            $('#editProduct #price').val(price);
+            $('#editProduct #category option[value="' + category + '"]').prop('selected', true);
+            $('#editProduct #status option[value="' + status + '"]').prop('selected', true);
+            $('#editProduct #img').attr('src', imageSrc);
+            $('#editProduct #image').val(imageName);
+        });
+
+        const image = document.getElementById('img')
+        const input = document.getElementById('image')
+
+        input.addEventListener("change", () => {
+            image.src = URL.createObjectURL(input.files[0])
+        });
         
-        var imageName = imageSrc.substring(imageSrc.lastIndexOf('/') + 1);
-
-        // Set the values in the modal fields
-        $('#editProduct #id').val(id);
-        $('#editProduct #name').val(name);
-        $('#editProduct #description').val(description);
-        $('#editProduct #price').val(price);
-        $('#editProduct #category option[value="' + category + '"]').prop('selected', true);
-        $('#editProduct #status option[value="' + status + '"]').prop('selected', true);
-        $('#editProduct #img').attr('src', imageSrc); 
-        $('#editProduct #image').val(imageName); 
-    });
-    
-    const image = document.getElementById('img')
-    const input = document.getElementById('image')
-
-    input.addEventListener("change", () => {
-        image.src=URL.createObjectURL(input.files[0])
-    })
+        function changePageSize() {
+            var pageSize = document.getElementById("pageSize").value;
+            var currentPage = document.getElementById('currentPage').value;
+            var keyword = document.getElementById('keyword').value;
+            var url = "/vegetfood/admin/product?s=" + pageSize + "&p=" + currentPage + "&keyword=" + keyword;
+            
+            window.location.href = url;
+        }
 
     </script>
 </body>

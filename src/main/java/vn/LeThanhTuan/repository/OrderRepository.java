@@ -1,5 +1,7 @@
 package vn.LeThanhTuan.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +16,10 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 	
 	@Query("SELECT o FROM Order o WHERE o.user.name like %?1% or o.address like %?1%")
 	Page<Order> findAllOrderByKeyword(String keyword, Pageable pageable);
+
+	@Query("SELECT COUNT(DISTINCT o.user.id) FROM Order o")
+	long countCustomer();
+	
+	@Query("SELECT o FROM Order o WHERE o.user.name like %?1% or o.address like %?1%")
+	List<Order> findAllByKeyword(String keyword);
 }

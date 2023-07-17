@@ -2,6 +2,11 @@
 <html lang="en" xmlns:th="http://thymeleaf.org">
 
 <head th:replace="fragmentAdmin :: head"></head>
+<style>
+	.card-text {
+		font-size: 30px;
+	}
+</style>
 
 <body>
     <!-- Sidebar -->
@@ -21,8 +26,8 @@
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Total Orders</h5>
-                                <p class="card-text">100</p>
+                                <h5 class="card-title">Tổng số đơn hàng</h5>
+                                <p class="card-text" th:text="${totalOrders}"></p>
                             </div>
                         </div>
                     </div>
@@ -30,13 +35,29 @@
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Total Customers</h5>
-                                <p class="card-text">50</p>
+                                <h5 class="card-title">Tổng số khách hàng</h5>
+                                <p class="card-text" th:text="${totalCustomers}"></p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Add more cards or content as needed -->
+                    <div class="col-md-6 mt-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Tổng số sản phẩm</h5>
+                                <p class="card-text" th:text="${totalProducts}"></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mt-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Tổng số người dùng</h5>
+                                <p class="card-text" th:text="${totalUsers}"></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </main>
         </div>

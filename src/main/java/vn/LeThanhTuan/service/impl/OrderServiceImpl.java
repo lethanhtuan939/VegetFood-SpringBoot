@@ -34,6 +34,7 @@ import vn.LeThanhTuan.repository.OrderDetailRepository;
 import vn.LeThanhTuan.repository.OrderRepository;
 import vn.LeThanhTuan.repository.UserRepository;
 import vn.LeThanhTuan.service.OrderService;
+import vn.LeThanhTuan.util.AppConstrant;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -72,7 +73,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public void saveOrder(HttpSession session, UserDto userDto, String address, String phoneNumber, String payMethod, String status)
+	public void saveOrder(HttpSession session, UserDto userDto, String address, String phoneNumber, String payMethod, String status, String note)
 			throws MessagingException, IOException {
 		String cartKey = "cart_" + userDto.getId();
 		Map<Integer, ShoppingCart> carts = (Map<Integer, ShoppingCart>) session.getAttribute(cartKey);
@@ -83,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
 		order.setTotalPrice(totalPrice);
 		order.setShippingFee(0);
 		order.setStatus(status);
-		order.setNotes("");
+		order.setNotes(note);
 		order.setAddress(address);
 		order.setPhoneNumber(phoneNumber);
 
@@ -157,11 +158,23 @@ public class OrderServiceImpl implements OrderService {
 		
 		return orderRepository.save(order);
 	}
+	
+	@Override
+	public List<Order> getListOrder(String keyword) {
+		List<Order> orders;
+		if(keyword.trim().isEmpty()) {
+			orders = orderRepository.findAll();
+		} else {
+			orders = orderRepository.findAllByKeyword(keyword);
+		}
+		
+		return orders;
+	}
 
 	public void sendEmail(String toEmail, Map<Integer, ShoppingCart> cartItems, String address, int totalPrice, String payMethod)
 	        throws MessagingException, IOException {
 	    String toAddress = toEmail;
-	    String senderName = "VegetFood";
+	    String senderName = AppConstrant.NAME;
 	    String subject = "Đặt hàng thành công";
 
 	    MimeMessage message = mailSender.createMimeMessage();
@@ -241,4 +254,13 @@ public class OrderServiceImpl implements OrderService {
 	    mailSender.send(message);
 	}
 
+	@Override
+	public long count() {
+		return orderRepository.count();
+	}
+	
+	@Override
+	public long countCustomer() {
+		return orderRepository.countCustomer();
+	}
 }

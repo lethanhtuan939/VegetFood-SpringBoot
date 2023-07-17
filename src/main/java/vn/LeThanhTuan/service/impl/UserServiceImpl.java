@@ -3,14 +3,20 @@ package vn.LeThanhTuan.service.impl;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +32,7 @@ import vn.LeThanhTuan.entity.dto.UserDto;
 import vn.LeThanhTuan.repository.RoleRepository;
 import vn.LeThanhTuan.repository.UserRepository;
 import vn.LeThanhTuan.service.UserService;
+import vn.LeThanhTuan.util.AppConstrant;
 import vn.LeThanhTuan.util.FileUploadUtil;
 
 @Service
@@ -57,6 +64,40 @@ public class UserServiceImpl implements UserService {
 	
 	private User toUser(UserDto userDto) {
 		return modelMapper.map(userDto, User.class);
+	}
+	
+	@Override
+	public List<UserDto> getListUser() {
+		List<User> users = userRepository.findAll();
+		
+		return users.stream().map(this::toDto).collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<UserDto> getListUser(String keyword) {
+		List<User> users;
+		if(keyword.trim().isEmpty()) {
+			users = userRepository.findAll();
+		} else {
+			users = userRepository.findAllByKeyword(keyword);
+		}
+		
+		return users.stream().map(this::toDto).collect(Collectors.toList());
+	}
+	
+	@Override
+	public Page<UserDto> getAllUsers(String keyword, int pageNumber, int amountPage) {
+		Sort sort = Sort.by("id");
+		Pageable pageable = PageRequest.of(pageNumber-1, amountPage, sort);
+		
+		Page<User> users;
+		if(keyword.trim().isEmpty()) {
+			users = userRepository.findAll(pageable);
+		} else {
+			users = userRepository.findAllByKeyword(keyword, pageable);
+		}
+		
+		return users.map(this::toDto);
 	}
 
 	@Override
@@ -102,7 +143,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int sendOTPMail(String email) throws UnsupportedEncodingException, MessagingException {
 		String toAddress = email;
-	    String senderName = "VegetFood";
+	    String senderName = AppConstrant.NAME;
 	    String subject = "Đăng ký tài khoản";
 	    String content = "Mã xác thực của bạn là: [[code]]";
 	     
@@ -158,6 +199,7 @@ public class UserServiceImpl implements UserService {
 		user.setName(userDto.getName());
 		user.setEmail(userDto.getEmail());
 		user.setPhoneNumber(userDto.getPhoneNumber());
+		user.setActive(userDto.isActive());
 		
 		User updatedUser = userRepository.save(user);
 		
@@ -180,5 +222,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean comparePassword(UserDto userDto, String password) {
 		return passwordEncoder.matches(password, userDto.getPassword());
+	}
+	
+	@Override
+	public long count() {
+		return userRepository.count();
 	}
 }

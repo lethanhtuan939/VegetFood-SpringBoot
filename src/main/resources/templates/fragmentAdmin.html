@@ -121,6 +121,10 @@
 					<a class="nav-link"
 						th:href="@{/vegetfood/admin/order}"><i class="fa-solid fa-shopping-cart"></i>&nbsp;Quản lý đơn hàng </a>
 				</li>
+				<li class="nav-item list-group-item" id="userTab">
+					<a class="nav-link"
+						th:href="@{/vegetfood/admin/user}"><i class="fa-solid fa-user"></i>&nbsp;Quản lý người dùng </a>
+				</li>
 			</ul>
 		</div>
 	</nav>
@@ -169,6 +173,8 @@
 		    }
 		    else if (currentURL.includes('/admin/order')) {
 		        document.getElementById('orderTab').classList.add('active');
+		    }else if (currentURL.includes('/admin/user')) {
+		        document.getElementById('userTab').classList.add('active');
 		    } else {
 		    	document.getElementById('adminTab').classList.add('active');
 		    }

@@ -16,7 +16,7 @@ public interface OrderService {
 
 	int getTotalPrice(HttpSession session, UserDto userDto);
 
-	void saveOrder(HttpSession session, UserDto userDto, String address, String phoneNumber, String payMethod, String status) throws UnsupportedEncodingException, MessagingException, IOException;
+	void saveOrder(HttpSession session, UserDto userDto, String address, String phoneNumber, String payMethod, String status, String note) throws UnsupportedEncodingException, MessagingException, IOException;
 
 	Page<Order> getOrderByUser(Integer id, int pageIndex);
 
@@ -25,5 +25,11 @@ public interface OrderService {
 	Order changeStatusOrder(Integer id, String status);
 
 	Page<Order> getAllOrder(int pageNumber, String keyword, int amountPage);
+
+	long count();
+
+	long countCustomer();
+
+	List<Order> getListOrder(String keyword);
 
 }

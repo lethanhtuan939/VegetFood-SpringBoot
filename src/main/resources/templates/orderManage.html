@@ -46,11 +46,23 @@
                     <div class="row">
                         <form class="form-inline d-flex flex-row col-5" th:action="@{/vegetfood/admin/order}"
                             method="get">
-                            <input type="search" class="form-control" name="keyword" th:value="${keyword}"
+                            <input type="search" id="keyword" class="form-control" name="keyword" th:value="${keyword}"
                                 placeholder="Tìm kiếm...">
                             <button type="submit" class="btn btn-primary mx-2 col-2">
                                 <i class="fa-solid fa-magnifying-glass"></i></button>
                         </form>
+                         <div class="d-flex justify-content-center align-items-center col-3">
+                            <label for="pageSize" class="col-4">Hiển thị:</label>
+			                <select id="pageSize" class="form-control" onchange="changePageSize()">
+			                    <option value="5" th:selected="${pageSize == 5}">5</option>
+			                    <option value="10" th:selected="${pageSize == 10}">10</option>
+			                    <option value="15" th:selected="${pageSize == 15}">15</option>
+			                    <option value="20" th:selected="${pageSize == 20}">20</option>
+			                </select>
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center col-2">
+                            <a th:href="@{/vegetfood/admin/order/excel(keyword=${keyword})}" class="btn btn-info">Xuất file Excel</a>
+                        </div>
                     </div>
                     <div class="container mt-3">
                         <div th:if="${success}" class="alert alert-success text-center">
@@ -60,6 +72,7 @@
                         <div th:if="${error}" class="text-center alert alert-danger">
                             <p th:text="${error}"></p>
                         </div>
+                        <input type="hidden" class="form-control" id="currentPage" th:value="${currentPage}">
                         <table class="table table-striped text-center">
                             <thead>
                                 <tr>
@@ -101,7 +114,7 @@
                                             </select>
                                         </td>
                                         <td class="align-middle">
-                                            <a th:href="@{/vegetfood/admin/order/detail(oid=${o.id}, p=${currentPage})}"
+                                            <a th:href="@{/vegetfood/admin/order/detail(oid=${o.id}, p=${currentPage}, s=${pageSize})}"
                                                 class="btn btn-info text-white"><i class="fa-solid fa-eye"></i></a>
                                         </td>
                                         <td class="align-middle">
@@ -117,19 +130,19 @@
                             <ul class="pagination d-flex justify-content-end">
                                 <li class="page-item" th:if="${currentPage > 1}">
                                     <a class="page-link"
-                                        th:href="@{/vegetfood/admin/order(p=${currentPage - 1}, keyword=${keyword})}"
+                                        th:href="@{/vegetfood/admin/order(p=${currentPage - 1}, keyword=${keyword}, s=${pageSize})}"
                                         aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
                                 <li class="page-item" th:each="i: ${#numbers.sequence(1, totalPages)}"
                                     th:classappend="${currentPage == i ? 'active' : ''}">
-                                    <a class="page-link" th:href="@{/vegetfood/admin/order(p=${i}, keyword=${keyword})}"
+                                    <a class="page-link" th:href="@{/vegetfood/admin/order(p=${i}, keyword=${keyword}, s=${pageSize})}"
                                         th:text="${i}"></a>
                                 </li>
                                 <li class="page-item" th:if="${currentPage < totalPages}">
                                     <a class="page-link"
-                                        th:href="@{/vegetfood/admin/order(p=${currentPage + 1}, keyword=${keyword})}"
+                                        th:href="@{/vegetfood/admin/order(p=${currentPage + 1}, keyword=${keyword}, s=${pageSize})}"
                                         aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
@@ -147,6 +160,16 @@
         function setAction(id) {
             var form = document.getElementById('form-' + id);
             form.submit();
+        }
+        
+        function changePageSize() {
+            var pageSize = document.getElementById("pageSize").value;
+        	console.log(pageSize)
+            var currentPage = document.getElementById('currentPage').value;
+            var keyword = document.getElementById('keyword').value;
+            var url = "/vegetfood/admin/order?s=" + pageSize + "&p=" + currentPage + "&keyword=" + keyword;
+            
+            window.location.href = url;
         }
     </script>
 </body>

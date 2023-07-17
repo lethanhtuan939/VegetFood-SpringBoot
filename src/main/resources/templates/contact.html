@@ -4,33 +4,114 @@
 <head th:replace="fragment :: head"></head>
 
 <body class="goto-here">
-<div th:replace="fragment :: top"></div>
+	<div th:replace="fragment :: top"></div>
 
-<nav th:replace="fragment :: nav"></nav>
+	<nav th:replace="fragment :: nav"></nav>
 
-<div class="hero-wrap hero-bread" style="background-image: url('images/bg_1.jpg');">
-    <div class="container">
-        <div class="row no-gutters slider-text align-items-center justify-content-center">
-            <div class="col-md-9 ftco-animate text-center">
-                <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Contact us</span>
-                </p>
-                <h1 class="mb-0 bread">Contact us</h1>
-            </div>
-        </div>
-    </div>
-</div>
+	<div class="hero-wrap hero-bread"
+		style="background-image: url('/images/bg_1.jpg');">
+		<div class="container">
+			<div
+				class="row no-gutters slider-text align-items-center justify-content-center">
+				<div class="col-md-9 ftco-animate text-center">
+					<p class="breadcrumbs">
+						<span class="mr-2"><a th:href="@{/vegetfood}">Home</a></span> <span>Contact
+							us</span>
+					</p>
+					<h1 class="mb-0 bread">Contact us</h1>
+				</div>
+			</div>
+		</div>
+	</div>
 
-<footer th:replace="fragment :: footer"></footer>
+	<section class="ftco-section contact-section bg-light">
+		<div class="container">
+			<div th:if="${success}" class="alert alert-success text-center">
+				<p th:text="${success}"></p>
+			</div>
+			<div class="row d-flex mb-5 contact-info">
+				<div class="w-100"></div>
+				<div class="col-md-3 d-flex">
+					<div class="info bg-white p-4">
+						<p>
+							<span>Địa chỉ:</span>[[@{admin.address}]]
+						</p>
+					</div>
+				</div>
+				<div class="col-md-3 d-flex">
+					<div class="info bg-white p-4">
+						<p>
+							<span>Phone:</span> <a href="tel://1234567920"></a>[[${admin.phoneNumber}]]
+						</p>
+					</div>
+				</div>
+				<div class="col-md-3 d-flex">
+					<div class="info bg-white p-4">
+						<p>
+							<span>Email:</span> <a href="mailto:info@yoursite.com"></a>[[${admin.email}]]
+						</p>
+					</div>
+				</div>
+				<div class="col-md-3 d-flex">
+					<div class="info bg-white p-4">
+						<p>
+							<span>Website</span> <a href="#">yoursite.com</a>
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="row block-9">
+				<div class="col-md-6 order-md-last d-flex">
+					<form th:action="@{/vegetfood/contact}" method="post"
+						class="bg-white p-5 contact-form">
+						<div class="form-group">
+							<input type="text" class="form-control" name="name" th:value="${session.user.name}"
+								placeholder="Tên">
+						</div>
+						<div class="form-group">
+							<input type="text" class="form-control" name="email" th:value="${session.user.email}"
+								placeholder="Email">
+						</div>
+						<div class="form-group">
+							<input type="text" class="form-control" name="subject"
+								placeholder="Tiêu đề">
+						</div>
+						<div class="form-group">
+							<textarea name="content" id="" cols="30" rows="7"
+								class="form-control" placeholder="Nội dung"></textarea>
+						</div>
+						<div class="form-group">
+							<input type="submit" value="Send Message"
+								class="btn btn-primary py-3 px-5">
+						</div>
+					</form>
 
-<!-- loader -->
-<div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
-    <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
-    <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
-            stroke="#F96D00" />
-</svg></div>
+				</div>
+
+				<div class="col-md-6 d-flex">
+					<div id="map" class="bg-white">
+						<img alt="" src="/imgaes/VEGETFOOD.png">
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<footer th:replace="fragment :: footer"></footer>
+
+	<!-- loader -->
+	<div id="ftco-loader" class="show fullscreen">
+		<svg class="circular" width="48px" height="48px">
+      <circle class="path-bg" cx="24" cy="24" r="22" fill="none"
+				stroke-width="4" stroke="#eeeeee" />
+      <circle class="path" cx="24" cy="24" r="22" fill="none"
+				stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" />
+    </svg>
+	</div>
 
 
-<div th:replace="fragment :: script"></div>
+	<div th:replace="fragment :: script"></div>
 
 </body>
+
 </html>

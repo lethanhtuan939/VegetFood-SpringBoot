@@ -92,6 +92,8 @@
                             <input type="text" class="form-control" id="addressInput" th:field="*{address}"
                                 th:value="${user.address}">
                         </div>
+                        <input type="hidden" class="form-control" id="active" th:field="*{active}"
+                                th:value="${user.active}">
                         <button type="submit" class="btn btn-primary">Cập nhật</button>
                     </div>
                 </div>
