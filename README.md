@@ -14,7 +14,7 @@
 #### Statistical Analysis
 #### Export Excel
 
-##### Pagination, Filtering, Page Size,...
+##### Pagination, Filtering, Page Size, Java Mail...
 
 
 
